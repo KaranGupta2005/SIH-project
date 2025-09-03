@@ -16,7 +16,7 @@ function App() {
         <Navbar />
 
         {/* Routes */}
-        <section className="flex-1 mt-28"> 
+        <section className="flex-1 mt-24"> 
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/virtualTour" element={<VirtualTour />} />
