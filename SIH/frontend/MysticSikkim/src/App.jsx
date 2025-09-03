@@ -1,5 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
 
 import Home from "./pages/Home";
 import VirtualTour from "./pages/VirtualTour";
@@ -25,6 +26,8 @@ function App() {
             <Route path="/calendar" element={<Calendar />} />
           </Routes>
         </section>
+
+        <Footer/>
 
       </div>
     </BrowserRouter>

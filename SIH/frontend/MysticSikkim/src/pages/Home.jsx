@@ -2,10 +2,12 @@ import { FlipWords } from "@/components/ui/flipWords";
 import { Vortex } from "@/components/ui/Vortex";
 import { motion } from "motion/react";
 import { NavLink } from "react-router-dom";
+import FeaturesSection from "../components/FeatureSection";
 
 export default function Home() {
   return (
     <>
+      {/* Hero Section */}
       <div
         className="relative h-screen w-screen bg-center bg-cover bg-no-repeat overflow-hidden flex items-start justify-center"
         style={{ backgroundImage: "url('/sikkim_bg.webp')" }}
@@ -20,19 +22,13 @@ export default function Home() {
           hue={40}
           className="relative z-10 flex flex-col items-center justify-start text-center mt-20 px-4"
         >
-          {/* FlipWords */}
-
           <h1 className="text-3xl md:text-6xl lg:text-7xl font-serif font-extrabold text-amber-500 tracking-wide drop-shadow-[0_3px_10px_rgba(0,0,0,0.85)]">
             <FlipWords words={["Unravel", "Unveil", "Unfold"]} />
           </h1>
 
-          {/* Tagline */}
-
           <p className="mt-6 text-4xl md:text-4xl lg:text-5xl font-serif font-extrabold italic bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 text-transparent bg-clip-text drop-shadow-[0_3px_8px_rgba(0,0,0,0.8)]">
             The Mystic of Sikkim
           </p>
-
-          {/* Button */}
 
           <div className="flex justify-center mt-12 items-center space-x-10">
             <NavLink to="/virtualTour">
@@ -45,6 +41,7 @@ export default function Home() {
                 Explore Tours
               </motion.button>
             </NavLink>
+
             <NavLink to="/exploreMap">
               <motion.button
                 whileHover={{ scale: 1.07 }}
@@ -58,6 +55,10 @@ export default function Home() {
           </div>
         </Vortex>
       </div>
+
+      {/* Features Section */}
+      <FeaturesSection />
     </>
   );
 }
+
