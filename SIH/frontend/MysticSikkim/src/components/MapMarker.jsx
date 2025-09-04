@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useState, useEffect, useRef } from "react";
 import {
   MapContainer,
@@ -38,7 +39,7 @@ L.Icon.Default.mergeOptions({
     "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png",
 });
 
-// === Monasteries (8) ===
+// === Monasteries ===
 const monasteries = [
   { id: 1, name: "Rumtek Monastery", coords: [27.3256, 88.6126], region: "East", description: "Seat of the Karmapa, Kagyu Buddhism.", popularity: 5, year: 1740 },
   { id: 2, name: "Enchey Monastery", coords: [27.3415, 88.6167], region: "East", description: "Famous for tantric Buddhist practices.", popularity: 4, year: 1909 },
@@ -143,6 +144,12 @@ export default function MonasteryMap() {
       const coords = data.features[0].geometry.coordinates.map((c) => [c[1], c[0]]);
       setRoute(coords);
       setDestination(destCoords);
+
+      // Move map to destination
+      if (mapRef.current) {
+        mapRef.current.setView(destCoords, 16);
+      }
+
       const steps = data.features[0].properties.segments[0].steps.map((s) => ({
         instruction: s.instruction,
         distance: (s.distance / 1000).toFixed(2),
@@ -153,6 +160,7 @@ export default function MonasteryMap() {
       console.warn("Route fetch failed", err);
       setRoute([position, destCoords]);
       setDestination(destCoords);
+      if (mapRef.current) mapRef.current.setView(destCoords, 16);
       setInstructions([]);
     }
   };
@@ -163,26 +171,28 @@ export default function MonasteryMap() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-stone-900 via-amber-900 to-stone-800 text-amber-50 pb-12">
-      <div className="pt-24 px-6">
+      <div className="pt-24 px-6 relative z-10">
         <h1 className="text-3xl font-extrabold mb-4">Monastery 360 — Sikkim</h1>
         <p className="text-sm text-amber-200 mb-6 max-w-2xl">
           Interactive map with directions. Click a monastery marker to open popup & get directions.
         </p>
 
-        <div className="flex flex-wrap gap-3 items-center mb-4">
+        <div className="flex flex-wrap gap-3 items-center mb-4 z-20 relative">
           <Input
             placeholder="Search monastery..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-72 text-black font-semibold"
+            className="w-72 text-black font-semibold bg-stone-100"
           />
           <Button onClick={() => {
             const found = monasteries.find((m) => m.name.toLowerCase().includes(search.toLowerCase()));
             if(found) getRoute(found.coords);
           }}>Search</Button>
 
-          <Select onValueChange={setRegionFilter}>
-            <SelectTrigger className="w-36"><SelectValue placeholder={`Region: ${regionFilter}`} /></SelectTrigger>
+          <Select onValueChange={setRegionFilter} modalPortal>
+            <SelectTrigger className="w-36 bg-stone-100 text-black font-semibold">
+              <SelectValue placeholder={`Region: ${regionFilter}`} />
+            </SelectTrigger>
             <SelectContent>
               <SelectItem value="All">All</SelectItem>
               <SelectItem value="East">East</SelectItem>
@@ -192,8 +202,10 @@ export default function MonasteryMap() {
             </SelectContent>
           </Select>
 
-          <Select onValueChange={setSortBy}>
-            <SelectTrigger className="w-36"><SelectValue placeholder={`Sort: ${sortBy}`} /></SelectTrigger>
+          <Select onValueChange={setSortBy} modalPortal>
+            <SelectTrigger className="w-36 bg-stone-100 text-black font-semibold">
+              <SelectValue placeholder={`Sort: ${sortBy}`} />
+            </SelectTrigger>
             <SelectContent>
               <SelectItem value="Popular">Popular</SelectItem>
               <SelectItem value="Oldest">Oldest</SelectItem>
@@ -212,7 +224,7 @@ export default function MonasteryMap() {
               center={position}
               zoom={13}
               className="w-full h-full"
-              scrollWheelZoom={false}
+              scrollWheelZoom={true}
             >
               <TileLayer
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -221,11 +233,8 @@ export default function MonasteryMap() {
               {position && <Marker position={position} icon={userArrowIcon(heading)} />}
               {destination && <Marker position={destination} icon={destinationIcon} />}
               {route.length > 0 && <Polyline positions={route} pathOptions={{ color: '#f59e0b', weight: 5 }} />}
-
               {filteredMonasteries.map((m) => (
-                <Marker key={m.id} position={m.coords} eventHandlers={{
-                  click: () => setModalOpen(true)
-                }}>
+                <Marker key={m.id} position={m.coords} eventHandlers={{ click: () => setModalOpen(true) }}>
                   <Popup>
                     <motion.div
                       initial={{ opacity: 0, y: 20 }}
@@ -242,7 +251,6 @@ export default function MonasteryMap() {
                   </Popup>
                 </Marker>
               ))}
-
               <FitRoute route={route} position={position} destination={destination} follow={followUser} />
               <FollowUser position={position} follow={followUser} />
             </MapContainer>
