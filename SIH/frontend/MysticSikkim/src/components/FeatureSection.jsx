@@ -61,7 +61,7 @@ export default function FeaturesSection() {
           <h2 className="text-4xl md:text-5xl font-bold mb-6">
             Discover the Key Features of{' '}
             <span className="bg-gradient-to-r from-amber-500 to-yellow-500 bg-clip-text text-transparent">
-              Monastery360
+              MysticSikkim
             </span>
           </h2>
           <p className="text-xl opacity-80 max-w-3xl mx-auto leading-relaxed">
