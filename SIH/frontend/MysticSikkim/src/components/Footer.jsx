@@ -34,7 +34,7 @@ export default function Footer() {
             alt="Monastery360 Logo"
             className="h-20 w-auto object-contain"
           />
-          <h2 className="text-2xl font-bold text-yellow-400">Monastery360</h2>
+          <h2 className="text-2xl font-bold text-yellow-400">MysticSikkim</h2>
         </div>
         <p className="text-yellow-200 text-sm mt-1 text-center">
           Explore the Heritage & Culture of Sikkim's Monasteries
@@ -135,8 +135,8 @@ export default function Footer() {
 
       {/* Footer Bottom */}
       <div className="border-t border-amber-700 mt-10 pt-4 text-center text-xs text-yellow-200">
-        <p>&copy; {new Date().getFullYear()} Monastery360. All rights reserved.</p>
-        <p className="mt-1">Website crafted with ❤️ by Monastery360 Dev Team</p>
+        <p>&copy; {new Date().getFullYear()} MysticSikkim. All rights reserved.</p>
+        <p className="mt-1">Website crafted with ❤️ by MysticSikkim Dev Team</p>
       </div>
     </footer>
   );
