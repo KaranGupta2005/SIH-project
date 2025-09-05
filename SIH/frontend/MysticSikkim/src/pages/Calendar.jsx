@@ -39,9 +39,6 @@ export default function App() {
     const [currentDate, setCurrentDate] = useState(new Date());
     const [selectedFestivals, setSelectedFestivals] = useState(null); // State for the modal (can hold multiple festivals)
 
-    // --- FESTIVAL DATA ---
-    // A comprehensive list of Sikkim's festivals with descriptions.
-    // Dates are approximated for 2025 for lunar-based festivals.
     const festivals = [
         { date: '01-14', name: 'Maghe Sankranti', description: 'Also known as Makar Sankranti, this festival marks the onset of warmer weather and is a major secular festival for the Nepalese, falling on the fourteenth of January every year.' },
         { date: '01-29', name: 'Sonam Lochar', description: 'The first day of the twelfth month in the lunar calendar is celebrated as the New Year by the Tamang Community with great joy and fervor.' },
