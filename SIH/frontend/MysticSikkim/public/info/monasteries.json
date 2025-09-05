@@ -16,7 +16,7 @@
         "Kangchenjunga National Park",
         "Ranka Monastery"
       ],
-      "mapIframe": "<iframe width=\"100%\" height=\"400\" src=\"https://maps.google.com/maps?q=Rumtek%20Monastery%20Sikkim&output=embed\" allowfullscreen=\"\"></iframe>"
+      "mapIframe": "<iframe src=\"https://www.google.com/maps/embed?pb=!4v1757090741669!6m8!1m7!1sCAoSFkNJSE0wb2dLRUlDQWdJQzY5ZTcxVWc.!2m2!1d27.28854528167496!2d88.56161848386864!3f162.98748506030543!4f-4.673275315830622!5f0.7820865974627469\" width=\"600\" height=\"450\" style=\"border:0;\" allowfullscreen=\"\" loading=\"lazy\" referrerpolicy=\"no-referrer-when-downgrade\"></iframe>"
     },
     {
       "name": "Enchey Monastery",
@@ -36,7 +36,7 @@
         "Hanuman Tok (7 km)",
         "Himalayan Zoological Park (7.6 km)"
       ],
-      "mapIframe": "<iframe width=\"100%\" height=\"400\" src=\"https://maps.google.com/maps?q=Enchey%20Monastery%20Gangtok&output=embed\" allowfullscreen=\"\"></iframe>"
+      "mapIframe": "<iframe src='https://www.google.com/maps/embed?pb=!4v1681234567890!6m8!1m7!1sYOUR_STREETVIEW_ID!2m2!1d27.28854528167496!2d88.56161848386864!3f162.98748506030543!4f-4.673275315830622!5f0.7820865974627469' width='600' height='450' style='border:0;' allowfullscreen='' loading='lazy' referrerpolicy='no-referrer-when-downgrade'></iframe>"
     },
     {
       "name": "Phodong Monastery",
@@ -55,7 +55,7 @@
         "Seven Sisters Waterfall (approx. 30 km)",
         "Gonjang Monastery (Gangtok area)"
       ],
-      "mapIframe": "<iframe width=\"100%\" height=\"400\" src=\"https://maps.google.com/maps?q=Phodong%20Monastery%20Sikkim&output=embed\" allowfullscreen=\"\"></iframe>"
+      "mapIframe": "<iframe src=\"https://www.google.com/maps/embed?pb=!4v1757091317406!6m8!1m7!1sCAoSF0NJSE0wb2dLRUlDQWdJREUtSTJBbXdF!2m2!1d27.41250043052966!2d88.58361050014649!3f205.67750095743415!4f-6.020377664173239!5f0.7820865974627469\" width=\"600\" height=\"450\" style=\"border:0;\" allowfullscreen=\"\" loading=\"lazy\" referrerpolicy=\"no-referrer-when-downgrade\"></iframe>"
     },
     {
       "name": "Dubdi Monastery",
@@ -74,7 +74,7 @@
         "Rabdentse Ruins",
         "Kanchenjunga Falls"
       ],
-      "mapIframe": "<iframe width=\"100%\" height=\"400\" src=\"https://maps.google.com/maps?q=Dubdi%20Monastery%20Sikkim&output=embed\" allowfullscreen=\"\"></iframe>"
+      "mapIframe": "<iframe src=\"https://www.google.com/maps/embed?pb=!4v1757091615833!6m8!1m7!1sCAoSF0NJSE0wb2dLRUlDQWdJQ0V6djI5NUFF!2m2!1d27.36632594282752!2d88.22961482878193!3f173.21861152615907!4f-1.825344046869489!5f0.7820865974627469\" width=\"600\" height=\"450\" style=\"border:0;\" allowfullscreen=\"\" loading=\"lazy\" referrerpolicy=\"no-referrer-when-downgrade\"></iframe>"
     },
     {
       "name": "Gonjang Monastery",
@@ -94,7 +94,7 @@
         "Himalayan Zoological Park",
         "Hanuman Tok"
       ],
-      "mapIframe": "<iframe width=\"100%\" height=\"400\" src=\"https://maps.google.com/maps?q=Gonjang%20Monastery%20Sikkim&output=embed\" allowfullscreen=\"\"></iframe>"
+      "mapIframe": "<iframe src=\"https://www.google.com/maps/embed?pb=!4v1757091684093!6m8!1m7!1sCAoSFkNJSE0wb2dLRUlDQWdJREUyYkN1UUE.!2m2!1d27.36884449623924!2d88.6132235970522!3f1.367549822115734!4f0.6692525063382675!5f0.7820865974627469\" width=\"600\" height=\"450\" style=\"border:0;\" allowfullscreen=\"\" loading=\"lazy\" referrerpolicy=\"no-referrer-when-downgrade\"></iframe>"
     },
     {
       "name": "Samdruptse Monastery",
@@ -114,7 +114,7 @@
         "Ralang Monastery",
         "Temi Tea Garden"
       ],
-      "mapIframe": "<iframe width=\"100%\" height=\"400\" src=\"https://maps.google.com/maps?q=Samdruptse%20Monastery%20Namchi&output=embed\" allowfullscreen=\"\"></iframe>"
+      "mapIframe": "<iframe src=\"https://www.google.com/maps/embed?pb=!4v1757091779626!6m8!1m7!1sCAoSFkNJSE0wb2dLRUlDQWdJQ0V2NkxaTlE.!2m2!1d27.17976886165958!2d88.37928758778976!3f55.982566773339585!4f12.483944538214317!5f0.7820865974627469\" width=\"600\" height=\"450\" style=\"border:0;\" allowfullscreen=\"\" loading=\"lazy\" referrerpolicy=\"no-referrer-when-downgrade\"></iframe>"
     },
     {
       "name": "Tashiding Monastery",
@@ -132,7 +132,7 @@
         "Dubdi Monastery (Yuksom)",
         "Kartok Monastery & Kartok Lake"
       ],
-      "mapIframe": "<iframe width=\"100%\" height=\"400\" src=\"https://maps.google.com/maps?q=Tashiding%20Monastery%20Sikkim&output=embed\" allowfullscreen=\"\"></iframe>"
+      "mapIframe": "<iframe src=\"https://www.google.com/maps/embed?pb=!4v1757091835138!6m8!1m7!1sCAoSFkNJSE0wb2dLRUlDQWdJQ0V6b09UVnc.!2m2!1d27.3080960299431!2d88.29783391014004!3f260!4f10!5f0.7820865974627469\" width=\"600\" height=\"450\" style=\"border:0;\" allowfullscreen=\"\" loading=\"lazy\" referrerpolicy=\"no-referrer-when-downgrade\"></iframe>"
     },
     {
       "name": "Ralang Monastery",
@@ -151,7 +151,7 @@
         "Temi Tea Estate",
         "Maenam Hill Sanctuary"
       ],
-      "mapIframe": "<iframe width=\"100%\" height=\"400\" src=\"https://maps.google.com/maps?q=Ralang%20Monastery%20Ravangla&output=embed\" allowfullscreen=\"\"></iframe>"
+      "mapIframe": "<iframe src=\"https://www.google.com/maps/embed?pb=!4v1757091886359!6m8!1m7!1sCAoSF0NJSE0wb2dLRUlDQWdJRF91ZnoteXdF!2m2!1d27.32849856209447!2d88.33547316295622!3f174.6029388311743!4f-18.081083419930593!5f0.7820865974627469\" width=\"600\" height=\"450\" style=\"border:0;\" allowfullscreen=\"\" loading=\"lazy\" referrerpolicy=\"no-referrer-when-downgrade\"></iframe>"
     },
     {
       "name": "Labrang Monastery",
@@ -168,7 +168,7 @@
         "Phodong Monastery (2 km)",
         "Seven Sisters Waterfall (approx. 30 km)"
       ],
-      "mapIframe": "<iframe width=\"100%\" height=\"400\" src=\"https://maps.google.com/maps?q=Labrang%20Monastery%20Phodong&output=embed\" allowfullscreen=\"\"></iframe>"
+      "mapIframe": "<iframe src=\"https://www.google.com/maps/embed?pb=!4v1757091991568!6m8!1m7!1sCAoSF0NJSE0wb2dLRUlDQWdJQ0UzTERBNmdF!2m2!1d35.19396620948748!2d102.5052288988086!3f4.1898928922408345!4f-20.069038307942833!5f0.7820865974627469\" width=\"600\" height=\"450\" style=\"border:0;\" allowfullscreen=\"\" loading=\"lazy\" referrerpolicy=\"no-referrer-when-downgrade\"></iframe>"
     },
     {
       "name": "Pemayangtse Monastery",
@@ -187,7 +187,7 @@
         "Khecheopalri Lake",
         "Sanga Choeling Monastery"
       ],
-      "mapIframe": "<iframe width=\"100%\" height=\"400\" src=\"https://maps.google.com/maps?q=Pemayangtse%20Monastery%20Pelling&output=embed\" allowfullscreen=\"\"></iframe>"
+      "mapIframe": "<iframe src=\"https://www.google.com/maps/embed?pb=!4v1757092048739!6m8!1m7!1sCAoSF0NJSE0wb2dLRUlDQWdJREVoSlhucEFF!2m2!1d27.30518919282202!2d88.25156580066201!3f168.64116158604602!4f22.401838605056!5f0.7820865974627469\" width=\"600\" height=\"450\" style=\"border:0;\" allowfullscreen=\"\" loading=\"lazy\" referrerpolicy=\"no-referrer-when-downgrade\"></iframe>"
     },
     {
       "name": "Sanghak Monastery",
@@ -206,7 +206,7 @@
         "Khecheopalri Lake",
         "Dubdi Monastery"
       ],
-      "mapIframe": "<iframe width=\"100%\" height=\"400\" src=\"https://maps.google.com/maps?q=Sanga%20Choeling%20Monastery%20Pelling&output=embed\" allowfullscreen=\"\"></iframe>"
+      "mapIframe": "<iframe src=\"https://www.google.com/maps/embed?pb=!4v1757092093717!6m8!1m7!1sCAoSF0NJSE0wb2dLRUlDQWdJRDJ6OW1Cb1FF!2m2!1d27.29781227835666!2d88.22164837000456!3f240!4f10!5f0.7820865974627469\" width=\"600\" height=\"450\" style=\"border:0;\" allowfullscreen=\"\" loading=\"lazy\" referrerpolicy=\"no-referrer-when-downgrade\"></iframe>"
     },
     {
       "name": "Lingdim Monastery",
@@ -223,8 +223,8 @@
         "Banjhakri Falls (Ranka)",
         "Rumtek Monastery"
       ],
-      "mapIframe": "<iframe width=\"100%\" height=\"400\" src=\"https://maps.google.com/maps?q=Lingdum%20Monastery%20Ranka&output=embed\" allowfullscreen=\"\"></iframe>"
-      
+      "mapIframe": "<iframe src=\"https://www.google.com/maps/embed?pb=!4v1757092153313!6m8!1m7!1sCAoSF0NJSE0wb2dLRUlDQWdJQ011T2JkcmdF!2m2!1d27.33118603686677!2d88.5790941249777!3f352.68292!4f0!5f0.7820865974627469\" width=\"600\" height=\"450\" style=\"border:0;\" allowfullscreen=\"\" loading=\"lazy\" referrerpolicy=\"no-referrer-when-downgrade\"></iframe>"
+
     }
   ]
 }
