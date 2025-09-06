@@ -112,9 +112,9 @@ export default function VirtualTour() {
                         {/* Close Button */}
                         <button
                           onClick={() => setOpenModal(null)}
-                          className="absolute top-4 right-4 p-2 rounded-full bg-amber-600 hover:bg-amber-700 text-white shadow-lg"
+                          className="absolute top-4 right-4 p-2 rounded-full bg-amber-600 hover:bg-amber-700 font-black text-white shadow-lg"
                         >
-                          <X className="w-5 h-5" />
+                          Close
                         </button>
 
                         {/* Left: Map iframe */}
