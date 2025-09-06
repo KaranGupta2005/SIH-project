@@ -11,7 +11,7 @@ import {
 } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import { motion, AnimatePresence } from "motion/react";
+import { motion, AnimatePresence } from "framer-motion"; // ✅ fixed import
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -110,7 +110,7 @@ export default function MonasteryMap() {
   const getRoute = async (destCoords) => {
     try {
       const key =
-        "eyJvcmciOiI1YjNjZTM1OTc4NTExMTAwMDFjZjYyNDgiLCJpZCI6IjJjYjNlYTlkNjIyYjQ0MGJhZjgwODI3MDJhYmU0MmYwIiwiaCI6Im11cm11cjY0In0=";
+        "eyJvcmciOiI1YjNjZTM1OTc4NTExMTAwMDFjZjYyNDgiLCJpZCI6IjJjYjNlYTlkNjIyYjQ0MGJhZjgwODI3MDJhYmU0MmYwIiwiaCI6Im11cm11cjY0In0="; 
       const res = await fetch(
         `https://api.openrouteservice.org/v2/directions/driving-car?api_key=${key}&start=${position[1]},${position[0]}&end=${destCoords[1]},${destCoords[0]}`
       );
@@ -200,15 +200,16 @@ export default function MonasteryMap() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+          {/* === Map Section === */}
           <div
-            className="lg:col-span-2 rounded-xl overflow-hidden shadow-2xl"
+            className="lg:col-span-2 rounded-xl shadow-2xl"
             style={{ minHeight: "65vh" }}
           >
             <MapContainer
               whenCreated={(map) => (mapRef.current = map)}
               center={position}
               zoom={13}
-              className="w-full h-full"
+              className="w-full h-full rounded-xl overflow-hidden" 
               scrollWheelZoom={true}
             >
               <TileLayer
@@ -228,7 +229,7 @@ export default function MonasteryMap() {
                 <Marker
                   key={m.id}
                   position={m.coords}
-                  eventHandlers={{ click: () => getRoute(m.coords) }} // FIXED HERE
+                  eventHandlers={{ click: () => getRoute(m.coords) }}
                 >
                   <Popup>
                     <motion.div
@@ -263,15 +264,16 @@ export default function MonasteryMap() {
             </MapContainer>
           </div>
 
+          {/* === Directions Panel === */}
           <div className="lg:col-span-1">
-            <Card className="bg-stone-800/70 border border-amber-600">
-              <CardHeader>
+            <Card className="bg-stone-800/70 border border-amber-600 h-[65vh] flex flex-col">
+              <CardHeader className="shrink-0">
                 <CardTitle className="text-lg text-amber-300">Directions</CardTitle>
               </CardHeader>
-              <CardContent>
+              <CardContent className="flex-1 overflow-y-auto pr-2"> 
                 <AnimatePresence>
                   {instructions.length > 0 ? (
-                    <ol className="space-y-2 max-h-[400px] overflow-y-auto pr-2">
+                    <ol className="space-y-2">
                       {instructions.map((step, idx) => (
                         <motion.li
                           key={idx}
