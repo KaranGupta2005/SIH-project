@@ -15,9 +15,9 @@ export default function Navbar() {
   ];
 
   const moreLinks = [
-    { name: "Culture", href: "/culture" },
-    { name: "Festivals", href: "/festivals" },
-    { name: "Gallery", href: "/gallery" },
+    { name: "Travel Guide", href: "/travel-guide" },
+    { name: "User Profile", href: "/user-profile" },
+    { name: "Contact Us", href: "/contact" },
   ];
 
   const baseLink =
