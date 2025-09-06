@@ -91,8 +91,8 @@ export default function VirtualTour() {
                     <motion.div
                       onClick={(e) => e.stopPropagation()}
                       className="w-full max-w-6xl max-h-[90vh] overflow-y-auto
-                                 bg-gradient-to-br from-gray-900 via-amber-900 to-gray-800
-                                 p-6 md:p-10 rounded-3xl shadow-2xl border border-amber-500/40
+                                 bg-gradient-to-br from-yellow-950 via-amber-900 to-yellow-800
+                                 p-6 md:p-10 rounded-4xl shadow-2xl border-6 border-amber-950
                                  flex flex-col md:flex-row gap-6 relative"
                       initial={{ scale: 0.8, opacity: 0 }}
                       animate={{ scale: 1, opacity: 1 }}
@@ -110,10 +110,10 @@ export default function VirtualTour() {
                       </button>
 
                       {/* Left: Map iframe */}
-                      <div className="md:flex-1 w-full min-h-[300px] md:min-h-[450px] border-b md:border-b-0 md:border-r border-amber-300/50 rounded-xl overflow-hidden">
+                      <div className="md:flex-1 w-full min-h-[300px] md:min-h-[450px] border-b md:border-b-0 md:border-r rounded-3xl border-4 border-amber-100 overflow-hidden shadow-inner">
                         <iframe
                           srcDoc={el.mapIframe}
-                          className="w-full h-full rounded-xl"
+                          className="w-full h-full rounded-xl "
                           title={el.name}
                           allowFullScreen
                         ></iframe>
@@ -121,34 +121,35 @@ export default function VirtualTour() {
 
                       {/* Right: Info Section */}
                       <div className="flex-1 flex flex-col justify-center gap-6 text-amber-100">
-                        <h2 className="text-3xl md:text-4xl font-extrabold text-amber-300 drop-shadow-md">
+                        <h2 className="text-3xl md:text-5xl font-extrabold text-amber-300 drop-shadow-md">
                           {el.name}
                         </h2>
+                        <div className="h-1 mt-1 w-auto rounded-full bg-gradient-to-r from-amber-400 via-amber-600 to-amber-800 "></div>
 
                         {el.history && (
                           <div>
-                            <h3 className="text-lg font-semibold text-amber-100">
+                            <h3 className="text-2xl font-bold text-amber-100">
                               History:
                             </h3>
-                            <p className="text-gray-100/90">{el.history}</p>
+                            <p className="text-gray-100/90 text-lg">{el.history}</p>
                           </div>
                         )}
 
                         {el.timings && (
                           <div>
-                            <h3 className="text-lg font-semibold text-amber-100">
+                            <h3 className="text-2xl font-bold text-amber-100">
                               Timings:
                             </h3>
-                            <p className="text-gray-100/90">{el.timings}</p>
+                            <p className="text-gray-100/90 text-lg">{el.timings}</p>
                           </div>
                         )}
 
                         {el.nearby?.length > 0 && (
                           <div>
-                            <h3 className="text-lg font-semibold text-amber-100">
+                            <h3 className="text-2xl font-bold text-amber-100">
                               Nearby:
                             </h3>
-                            <ul className="list-disc list-inside text-indigo-200/90">
+                            <ul className="list-disc list-inside text-lg text-amber-200/90">
                               {el.nearby.map((place, index) => (
                                 <li key={index}>{place}</li>
                               ))}
