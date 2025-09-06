@@ -73,6 +73,7 @@ export default function VirtualTour() {
             {displayData.map((el) => (
               <div key={el.name} className="relative flex flex-col h-full">
                 <DisplayCard
+                  name={el.name}
                   photo={el.photo}
                   description={el.description}
                   onView360={() => setOpenModal(el.name)}
