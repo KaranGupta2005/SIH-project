@@ -6,10 +6,11 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
 export const DisplayCard = ({
+  name,
   photo,
   description = [],
   onView360,
-  className = 'displaycard',
+  className = "displaycard",
   ...props
 }) => {
   return (
@@ -24,7 +25,7 @@ export const DisplayCard = ({
       }}
       whileTap={{ scale: 0.97 }}
       className={cn(
-        "group relative flex flex-col rounded-3xl overflow-hidden border border-amber-50/20 bg-gradient-to-br from-gray-900/85 via-gray-800/80 to-gray-900/95 shadow-2xl transition-all duration-500",
+        "group relative flex flex-col rounded-3xl overflow-hidden border-4 border-amber-50/20 bg-gradient-to-br from-gray-900/85 via-gray-800/80 to-gray-900/95 shadow-2xl transition-all duration-500",
         className
       )}
       style={{
@@ -41,7 +42,7 @@ export const DisplayCard = ({
         >
           <img
             src={photo}
-            alt="Monastery"
+            alt={name || "Monastery"}
             className="w-full h-full object-cover rounded-t-3xl transition-transform duration-500 group-hover:scale-105"
             style={{ boxShadow: "0 8px 32px rgba(253,224,71,0.2)" }}
           />
@@ -49,19 +50,27 @@ export const DisplayCard = ({
       )}
 
       <div className="p-6 flex-1 bg-gray-900/60 backdrop-blur-sm relative">
+        {name && (
+          <>
+            <h2 className="text-2xl md:text-3xl font-extrabold text-amber-300 drop-shadow-md">
+              {name}
+            </h2>
+            <div className="h-1 mt-1 w-auto rounded-full bg-gradient-to-r from-amber-400 via-amber-600 to-amber-800"></div>
+          </>
+        )}
         {Array.isArray(description) ? (
-          <ul className="list-disc pl-5 space-y-2 text-amber-100">
+          <ul className="list-disc pl-5 space-y-2 text-amber-100 mt-3">
             {description.map((line, idx) => (
               <li
                 key={idx}
-                className="text-sm leading-relaxed transition-colors duration-300 hover:text-amber-300"
+                className=" leading-relaxed transition-colors duration-300 hover:text-amber-300"
               >
                 {line}
               </li>
             ))}
           </ul>
         ) : (
-          <p className="text-sm text-amber-100">{description}</p>
+          <p className="text-xl font-bold text-amber-100 mt-3">{description}</p>
         )}
         <motion.div
           className="absolute inset-0 rounded-3xl pointer-events-none"
