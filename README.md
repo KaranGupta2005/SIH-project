@@ -49,3 +49,66 @@ It combines **virtual tours, digital archives, cultural events, and smart touris
 ---
 
 ## 📂 Project Structure
+MysticSikkim/
+├── public/ # Static files (manifest.json, icons, 360° assets)
+├── src/
+│ ├── components/ # UI components (Navbar, Cards, Modals, etc.)
+│ ├── pages/ # Main pages (Home, Map, Archives, Calendar)
+│ ├── services/ # API integrations (Maps, Places, Audio Guide)
+│ ├── assets/ # Images, audio narrations, etc.
+│ └── App.js # Root React file
+├── backend/ # Node.js + Express API server
+├── package.json
+└── README.md
+
+
+---
+
+## ⚡ How to Run
+
+1. Clone this repo:
+   ```bash
+   git clone https://github.com/<your-username>/MysticSikkim.git
+   cd MysticSikkim
+
+
+Install dependencies:
+
+npm install
+
+
+Create a .env file and add:
+
+REACT_APP_GOOGLE_MAPS_KEY=your_api_key_here
+
+
+Start development server:
+
+npm start
+
+
+Build production version:
+
+npm run build
+
+🎯 Impact
+
+Tourism Boost: Virtual + on-site experiences attract more tourists.
+
+Cultural Preservation: Digital archiving saves endangered manuscripts & murals.
+
+Community Empowerment: Local monks, guides & artisans can contribute.
+
+Education & Research: Provides structured access to global scholars & students.
+
+👥 Team MysticSikkim
+
+Developers: [Your Team Names]
+
+Domain Experts: [Mentors / Guides]
+
+Role in SIH: Preserving Sikkim’s heritage with cutting-edge digital solutions.
+
+🏆 Acknowledgements
+
+Special thanks to SIH 2025, mentors, and the Sikkim tourism & monastery communities who inspired this project.
