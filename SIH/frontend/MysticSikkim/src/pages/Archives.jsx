@@ -1,5 +1,5 @@
 import { Button } from "../components/ui/button";
-import { Filter, Search, X, MapPin, Calendar } from "lucide-react";
+import { Filter, Search, X } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input.jsx";
 import { archiveData } from "../../public/info/archive.js";
@@ -47,12 +47,13 @@ function ArchiveCard({ item, onView360 }) {
         <img
           src={item.thumbnail || item.fullImage}
           alt={item.title}
+          loading="lazy"
           className="w-full h-56 md:h-48 object-cover rounded-t-3xl ring-4 ring-amber-500 shadow-inner"
         />
         <div className="p-6 text-gray-100">
           <h3 className="text-2xl font-bold mb-2">{item.title}</h3>
-          <p className="text-sm mb-1">Monastery: {item.monastery}</p>
-          <p className="text-sm mb-1">Date: {item.date}</p>
+          {item.monastery && <p className="text-sm mb-1">Monastery: {item.monastery}</p>}
+          {item.date && <p className="text-sm mb-1">Date: {item.date}</p>}
           {item.type && (
             <p className="text-sm mb-1">
               Type:{" "}
@@ -66,14 +67,13 @@ function ArchiveCard({ item, onView360 }) {
               Condition:{" "}
               <span
                 className={`px-3 py-1 rounded-2xl text-sm font-medium ${
-                  item.condition.toLowerCase() === "excellent" ||
-                  item.condition.toLowerCase() === "well preserved"
+                  ["excellent", "well preserved"].includes(item.condition?.toLowerCase())
                     ? "text-green-500 bg-green-900/30"
-                    : item.condition.toLowerCase() === "good"
+                    : item.condition?.toLowerCase() === "good"
                     ? "text-blue-400 bg-blue-900/30"
-                    : item.condition.toLowerCase() === "fragile"
+                    : item.condition?.toLowerCase() === "fragile"
                     ? "text-orange-400 bg-orange-900/30"
-                    : item.condition.toLowerCase() === "restored"
+                    : item.condition?.toLowerCase() === "restored"
                     ? "text-purple-400 bg-purple-900/30"
                     : "text-gray-300 bg-gray-900/30"
                 }`}
@@ -110,8 +110,8 @@ export default function Archives() {
         items.filter(
           (item) =>
             item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            item.monastery.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            item.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            item.monastery?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            item.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
             (item.type && item.type.toLowerCase().includes(searchTerm.toLowerCase()))
         )
       );
@@ -171,14 +171,10 @@ export default function Archives() {
 
         {/* No Results */}
         {filteredItems.length === 0 && (
-          <div className="text-center py-12">
-            <div className="text-gray-400 text-6xl mb-4">📚</div>
-            <h3 className="text-xl font-semibold text-gray-300 mb-2">
-              No archives found
-            </h3>
-            <p className="text-gray-400">
-              Try adjusting your search terms or browse different categories.
-            </p>
+          <div className="text-center py-12 text-gray-400">
+            <div className="text-6xl mb-4">📚</div>
+            <h3 className="text-xl font-semibold mb-2">No archives found</h3>
+            <p>Try adjusting your search terms or browse different categories.</p>
           </div>
         )}
       </div>
@@ -197,29 +193,24 @@ export default function Archives() {
             <motion.div
               onClick={(e) => e.stopPropagation()}
               className="w-full max-w-6xl max-h-[90vh] overflow-y-auto
-                         bg-gradient-to-br from-yellow-950 via-amber-900 to-yellow-800
-                         p-6 md:p-10 rounded-4xl shadow-2xl border-6 border-amber-950
-                         flex flex-col md:flex-row gap-6 relative"
+                        bg-gradient-to-br from-yellow-950 via-amber-900 to-yellow-800
+                        p-6 md:p-10 rounded-4xl shadow-2xl border-6 border-amber-950
+                        flex flex-col md:flex-row gap-6 relative"
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.8, opacity: 0 }}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              transition={{
-                duration: 0.3,
-                type: "spring",
-                stiffness: 300,
-                damping: 30,
-              }}
+              transition={{ duration: 0.3, type: "spring", stiffness: 300, damping: 30 }}
             >
               {/* Left: Image */}
               <div className="md:flex-1 w-full min-h-[300px] md:min-h-[450px] rounded-3xl overflow-hidden shadow-inner border-4 border-amber-300 relative">
                 <img
                   src={selectedItem.fullImage}
                   alt={selectedItem.title}
+                  loading="lazy"
                   className="w-full h-full object-cover rounded-3xl ring-2 ring-amber-400 shadow-lg"
                 />
-                {/* Close Button placed top-right inside image container */}
                 <button
                   onClick={() => setSelectedItem(null)}
                   className="absolute top-4 right-4 p-2 rounded-full bg-amber-600 hover:bg-amber-700 font-black text-white shadow-lg z-10"
