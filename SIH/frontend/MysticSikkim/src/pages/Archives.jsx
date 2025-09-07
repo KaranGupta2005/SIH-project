@@ -3,7 +3,7 @@ import { Filter, Search, Eye, MapPin, Calendar, X } from "lucide-react";
 import { useState , useEffect } from "react";
 import {Input} from "@/components/ui/input.jsx";
 import {archiveData} from "../../public/info/archive.js";
-import {ArchiveCard} from "@/components/ui/ArchiveCard.jsx";
+import {DisplayCard} from "@/components/ui/displayCard.jsx";
 
 
 export function SearchBar({ query, setQuery }) {
@@ -111,11 +111,18 @@ export default function Archives() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
                     {filteredItems.map((item) => (
-                        <ArchiveCard
+                        <DisplayCard
                             key={item.id}
-                            item={item}
-                            onSelect={setSelectedItem}
-                            getConditionColor={getConditionColor}
+                            name={item.title}
+                            photo={item.thumbnail || item.fullImage}
+                            description={[
+                                `Monastery: ${item.monastery}`,
+                                `Date: ${item.date}`,
+                                `Type: ${item.type}`,
+                                ...(item.condition ? [`Condition: ${item.condition}`] : []),
+                                item.description
+                            ]}
+                            onView360={() => setSelectedItem(item)}
                         />
                     ))}
                 </div>
