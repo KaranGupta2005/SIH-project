@@ -6,7 +6,7 @@ import { DisplayCard } from "@/components/ui/displayCard";
 import { AnimatePresence, motion } from "motion/react";
 import Reveal from "@/components/ui/Reveal";
 
-function SearchBar({ query, setQuery }) {
+export function SearchBar({ query, setQuery }) {
   return (
     <div className="flex items-center gap-3 w-full max-w-md bg-white/90 backdrop-blur-md p-4 rounded-xl shadow-xl border border-amber-200 mt-6">
       <Search className="w-5 h-5 text-amber-600" />
