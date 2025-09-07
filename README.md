@@ -49,6 +49,7 @@ It combines **virtual tours, digital archives, cultural events, and smart touris
 ---
 
 ## 📂 Project Structure
+
 MysticSikkim/
 ├── public/ # Static files (manifest.json, icons, 360° assets)
 ├── src/
@@ -64,51 +65,50 @@ MysticSikkim/
 
 ---
 
+
 ## ⚡ How to Run
 
-1. Clone this repo:
+1. **Clone this repo:**
    ```bash
    git clone https://github.com/<your-username>/MysticSikkim.git
    cd MysticSikkim
 
 
-Install dependencies:
+2.Install dependencies:
 
 npm install
 
-
-Create a .env file and add:
+3.Create a .env file and add:
 
 REACT_APP_GOOGLE_MAPS_KEY=your_api_key_here
 
 
-Start development server:
+4.Start development server:
 
-npm start
+npm run start
 
 
-Build production version:
+5.Build production version:
 
-npm run build
+npm run dev
 
-🎯 Impact
+## 🎯 Impact
 
-Tourism Boost: Virtual + on-site experiences attract more tourists.
+- **Tourism Boost** → Virtual + on-site experiences attract more tourists.  
+- **Cultural Preservation** → Digital archiving saves endangered manuscripts & murals.  
+- **Community Empowerment** → Local monks, guides & artisans can contribute.  
+- **Education & Research** → Provides structured access to global scholars & students.  
 
-Cultural Preservation: Digital archiving saves endangered manuscripts & murals.
+---
 
-Community Empowerment: Local monks, guides & artisans can contribute.
+## 👥 Team MysticSikkim
 
-Education & Research: Provides structured access to global scholars & students.
+- **Developers:** [Your Team Names]  
+- **Domain Experts:** [Mentors / Guides]  
+- **Role in SIH:** Preserving Sikkim’s heritage with cutting-edge digital solutions.  
 
-👥 Team MysticSikkim
+---
 
-Developers: [Your Team Names]
+## 🏆 Acknowledgements
 
-Domain Experts: [Mentors / Guides]
-
-Role in SIH: Preserving Sikkim’s heritage with cutting-edge digital solutions.
-
-🏆 Acknowledgements
-
-Special thanks to SIH 2025, mentors, and the Sikkim tourism & monastery communities who inspired this project.
+Special thanks to **SIH 2025**, mentors, and the **Sikkim tourism & monastery communities** who inspired this project.  
