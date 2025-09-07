@@ -61,8 +61,7 @@ export default function VirtualTour() {
         </h1>
         <div className="mt-3 h-1 w-full bg-gradient-to-r from-amber-400 via-amber-600 to-amber-800 rounded-full"></div>
         <p className="mt-6 text-lg font-medium text-gray-800 drop-shadow-sm text-center">
-          Step inside, explore beyond boundaries, and experience heritage like
-          never before.
+          Step inside, explore beyond boundaries, and experience heritage like never before.
         </p>
         <SearchBar query={query} setQuery={setQuery} />
       </div>
@@ -82,6 +81,7 @@ export default function VirtualTour() {
                     className="h-full"
                   />
 
+                  {/* Modal */}
                   {openModal === el.name && (
                     <motion.div
                       initial={{ opacity: 0 }}
@@ -94,9 +94,9 @@ export default function VirtualTour() {
                       <motion.div
                         onClick={(e) => e.stopPropagation()}
                         className="w-full max-w-6xl max-h-[90vh] overflow-y-auto
-                                 bg-gradient-to-br from-yellow-950 via-amber-900 to-yellow-800
-                                 p-6 md:p-10 rounded-4xl shadow-2xl border-6 border-amber-950
-                                 flex flex-col md:flex-row gap-6 relative"
+                                   bg-gradient-to-br from-yellow-950 via-amber-900 to-yellow-800
+                                   p-6 md:p-10 rounded-4xl shadow-2xl border-6 border-amber-950
+                                   flex flex-col md:flex-row gap-6 relative"
                         initial={{ scale: 0.8, opacity: 0 }}
                         animate={{ scale: 1, opacity: 1 }}
                         exit={{ scale: 0.8, opacity: 0 }}
@@ -109,22 +109,22 @@ export default function VirtualTour() {
                           damping: 30,
                         }}
                       >
-                        {/* Close Button */}
-                        <button
-                          onClick={() => setOpenModal(null)}
-                          className="absolute top-4 right-4 p-2 rounded-full bg-amber-600 hover:bg-amber-700 font-black text-white shadow-lg"
-                        >
-                          Close
-                        </button>
-
                         {/* Left: Map iframe */}
-                        <div className="md:flex-1 w-full min-h-[300px] md:min-h-[450px] border-b md:border-b-0 md:border-r rounded-3xl border-4 border-amber-100 overflow-hidden shadow-inner">
+                        <div className="md:flex-1 w-full min-h-[300px] md:min-h-[450px] rounded-3xl overflow-hidden shadow-inner border-4 border-amber-300 relative">
                           <iframe
                             srcDoc={el.mapIframe}
-                            className="w-full h-full rounded-xl "
+                            className="w-full h-full rounded-3xl ring-2 ring-amber-400 shadow-lg"
                             title={el.name}
                             allowFullScreen
                           ></iframe>
+
+                          {/* Close Button */}
+                          <button
+                            onClick={() => setOpenModal(null)}
+                            className="absolute top-4 right-4 p-2 rounded-full bg-amber-600 hover:bg-amber-700 font-black text-white shadow-lg z-10"
+                          >
+                            <X className="w-5 h-5" />
+                          </button>
                         </div>
 
                         {/* Right: Info Section */}
@@ -132,35 +132,25 @@ export default function VirtualTour() {
                           <h2 className="text-3xl md:text-5xl font-extrabold text-amber-300 drop-shadow-md">
                             {el.name}
                           </h2>
-                          <div className="h-1 mt-1 w-auto rounded-full bg-gradient-to-r from-amber-400 via-amber-600 to-amber-800 "></div>
+                          <div className="h-1 mt-1 w-auto rounded-full bg-gradient-to-r from-amber-400 via-amber-600 to-amber-800"></div>
 
                           {el.history && (
                             <div>
-                              <h3 className="text-2xl font-bold text-amber-100">
-                                History:
-                              </h3>
-                              <p className="text-gray-100/90 text-lg">
-                                {el.history}
-                              </p>
+                              <h3 className="text-2xl font-bold text-amber-100">History:</h3>
+                              <p className="text-gray-100/90 text-lg">{el.history}</p>
                             </div>
                           )}
 
                           {el.timings && (
                             <div>
-                              <h3 className="text-2xl font-bold text-amber-100">
-                                Timings:
-                              </h3>
-                              <p className="text-gray-100/90 text-lg">
-                                {el.timings}
-                              </p>
+                              <h3 className="text-2xl font-bold text-amber-100">Timings:</h3>
+                              <p className="text-gray-100/90 text-lg">{el.timings}</p>
                             </div>
                           )}
 
                           {el.nearby?.length > 0 && (
                             <div>
-                              <h3 className="text-2xl font-bold text-amber-100">
-                                Nearby:
-                              </h3>
+                              <h3 className="text-2xl font-bold text-amber-100">Nearby:</h3>
                               <ul className="list-disc list-inside text-lg text-amber-200/90">
                                 {el.nearby.map((place, index) => (
                                   <li key={index}>{place}</li>
