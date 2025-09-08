@@ -7,6 +7,7 @@ import VirtualTour from "./pages/VirtualTour";
 import Map from "./pages/Map";
 import Archives from "./pages/Archives";
 import Calendar from "./pages/Calendar";
+import FloatingChatbot from "./components/chatbot";
 
 function App() {
   return (
@@ -26,7 +27,7 @@ function App() {
             <Route path="/calendar" element={<Calendar />} />
           </Routes>
         </section>
-
+        <FloatingChatbot />
         <Footer/>
 
       </div>
