@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { Menu, X } from "lucide-react";
@@ -8,16 +9,17 @@ export default function Navbar() {
 
   const navLinks = [
     { name: "Home", path: "/" },
-    { name: "Virtual Tour", path: "/virtualTour" },
-    { name: "Explore Map", path: "/exploreMap" },
+    { name: "Virtual Tour", path: "/virtualtour" },
+    { name: "Explore Map", path: "/exploremap" },
     { name: "Archives", path: "/archives" },
     { name: "Calendar", path: "/calendar" },
   ];
 
   const moreLinks = [
-    { name: "Travel Guide", href: "/travel-guide" },
-    { name: "User Profile", href: "/user-profile" },
-    { name: "Contact Us", href: "/contact" },
+    { name: "Travel Guide", path: "/travel-guide" },
+    { name: "User Profile", path: "/signup" }, 
+    { name: "User Login", path: "/login" }, 
+    { name: "Contact Us", path: "/contact" },
   ];
 
   const baseLink =
@@ -64,14 +66,15 @@ export default function Navbar() {
             </button>
             {dropdownOpen && (
               <div className="absolute right-0 mt-3 w-52 bg-white text-gray-800 rounded-xl shadow-xl overflow-hidden border border-gray-300">
-                {moreLinks.map(({ name, href }) => (
-                  <a
+                {moreLinks.map(({ name, path }) => (
+                  <NavLink
                     key={name}
-                    href={href}
+                    to={path}
+                    onClick={() => setDropdownOpen(false)}
                     className="block px-6 py-3 text-lg hover:bg-gray-100 transition-colors"
                   >
                     {name}
-                  </a>
+                  </NavLink>
                 ))}
               </div>
             )}
@@ -109,15 +112,15 @@ export default function Navbar() {
             </NavLink>
           ))}
 
-          {moreLinks.map(({ name, href }) => (
-            <a
+          {moreLinks.map(({ name, path }) => (
+            <NavLink
               key={name}
-              href={href}
+              to={path}
               onClick={() => setMobileOpen(false)}
               className="block text-xl hover:text-amber-400 transition-colors"
             >
               {name}
-            </a>
+            </NavLink>
           ))}
         </div>
       )}

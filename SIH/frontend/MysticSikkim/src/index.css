@@ -7,6 +7,77 @@ html{
   scroll-behavior: smooth;
 }
 
+@layer utilities {
+  /* ===== Animations ===== */
+  @keyframes move {
+    100% {
+      transform: translate3d(0, 0, 1px) rotate(360deg);
+    }
+  }
+  @keyframes glow {
+    0% {
+      box-shadow: 0 0 20px rgba(245, 158, 11, 0.3), 0 0 40px rgba(217, 119, 6, 0.2);
+    }
+    50% {
+      box-shadow: 0 0 40px rgba(245, 158, 11, 0.6), 0 0 80px rgba(217, 119, 6, 0.4);
+    }
+    100% {
+      box-shadow: 0 0 20px rgba(245, 158, 11, 0.3), 0 0 40px rgba(217, 119, 6, 0.2);
+    }
+  }
+  @keyframes shimmer {
+    0% {
+      background-position: -200% 0;
+    }
+    100% {
+      background-position: 200% 0;
+    }
+  }
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0px) rotate(0deg);
+    }
+    33% {
+      transform: translateY(-10px) rotate(1deg);
+    }
+    66% {
+      transform: translateY(5px) rotate(-1deg);
+    }
+  }
+
+  /* ===== Custom Utilities ===== */
+  .animated-background {
+    @apply fixed top-0 left-0 w-screen h-screen overflow-hidden;
+    background: linear-gradient(135deg, #1f2937 0%, #92400e 50%, #1f2937 100%);
+  }
+
+  .signup-card {
+    @apply relative transition-all duration-300 backdrop-blur-2xl;
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.1),
+      rgba(255, 255, 255, 0.05)
+    );
+    border: 1px solid rgba(245, 158, 11, 0.2);
+  }
+
+  .signup-card:hover {
+    animation: glow 2s ease-in-out infinite;
+    transform: translateY(-5px);
+    border: 1px solid rgba(245, 158, 11, 0.4);
+  }
+
+  .shimmer-button {
+    background: linear-gradient(45deg, #f59e0b, #d97706, #f59e0b);
+    background-size: 200% 200%;
+    animation: shimmer 2s linear infinite;
+  }
+
+  .shimmer-button:hover {
+    animation: shimmer 1s linear infinite;
+  }
+}
+
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
