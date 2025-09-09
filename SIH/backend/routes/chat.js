@@ -1,13 +1,25 @@
+// backend/chatRouter.js
 import express from "express";
 import Groq from "groq-sdk";
+import dotenv from 'dotenv';
+dotenv.config();
 
-const chatrouter = express.Router();
+const chatRouter = express.Router();
 
+// Initialize Groq client
 const groq = new Groq({
-  apiKey: "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",
+  apiKey: process.env.GROQ_API_KEY,
 });
-chatrouter.post("/", async (req, res) => {
+
+// Middleware to parse JSON body
+chatRouter.use(express.json());
+
+chatRouter.post("/", async (req, res) => {
   const { message } = req.body;
+
+  if (!message) {
+    return res.status(400).json({ error: "Message is required" });
+  }
 
   try {
     // System instruction to keep responses about Sikkim
@@ -18,7 +30,7 @@ chatrouter.post("/", async (req, res) => {
           role: "system",
           content:
             "You are an assistant that ONLY answers questions related to Sikkim. " +
-            "If a question is unrelated, politely redirect to Sikkim-related info."
+            "If a question is unrelated, politely redirect to Sikkim-related info.",
         },
         {
           role: "user",
@@ -29,7 +41,8 @@ chatrouter.post("/", async (req, res) => {
       max_completion_tokens: 500,
     });
 
-    const reply = completion.choices[0].message.content || "No response.";
+    const reply =
+      completion.choices?.[0]?.message?.content || "No response from assistant.";
     res.json({ reply });
   } catch (err) {
     console.error("Groq API Error:", err.message);
@@ -37,4 +50,4 @@ chatrouter.post("/", async (req, res) => {
   }
 });
 
-export default chatrouter;
+export default chatRouter;
