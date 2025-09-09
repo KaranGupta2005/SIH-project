@@ -1,15 +1,18 @@
-import express from "express";
 import dotenv from "dotenv";
+dotenv.config();
+
+import express from "express";
+
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import connectDB from "./config/db.js"; 
 import chatrouter from "./routes/chat.js";
 
-dotenv.config();
 
 const app = express();
 
 connectDB();
+console.log("GROQ_API_KEY:", process.env.GROQ_API_KEY);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
