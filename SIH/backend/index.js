@@ -3,9 +3,10 @@ import dotenv from "dotenv";
 import mongoose from "mongoose";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import connectDB from "./config/db.js";
-
+import connectDB from "./config/db.js"; 
 dotenv.config();
+
+import chatrouter from "./routes/chat.js";
 
 const app = express();
 connectDB();
@@ -21,6 +22,9 @@ app.use(cors({
 app.get("/", (req, res) => {
   res.send("Monastery360 Backend is running 🚀");
 });
+
+// Chatbot API route
+app.use("/api/chat", chatrouter);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

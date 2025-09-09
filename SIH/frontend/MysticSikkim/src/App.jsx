@@ -9,6 +9,7 @@ import Archives from "./pages/Archives";
 import Calendar from "./pages/Calendar";
 import Signup from "./pages/Signup";
 import Login from "./pages/Login";
+import FloatingChatbot from "./components/chatbot";
 
 function App() {
   return (
@@ -25,10 +26,13 @@ function App() {
             <Route path="/exploremap" element={<Map />} />
             <Route path="/archives" element={<Archives />} />
             <Route path="/calendar" element={<Calendar />} />
-            <Route path="/signup" element={<Signup />} /> 
-            <Route path="/login" element={<Login />} /> 
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/login" element={<Login />} />
           </Routes>
         </main>
+
+        {/* Floating Chatbot */}
+        <FloatingChatbot />
 
         {/* Footer */}
         <Footer />
@@ -38,4 +42,5 @@ function App() {
 }
 
 export default App;
+
 

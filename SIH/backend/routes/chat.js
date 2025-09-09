@@ -1,0 +1,40 @@
+import express from "express";
+import Groq from "groq-sdk";
+
+const chatrouter = express.Router();
+
+const groq = new Groq({
+  apiKey: "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",
+});
+chatrouter.post("/", async (req, res) => {
+  const { message } = req.body;
+
+  try {
+    // System instruction to keep responses about Sikkim
+    const completion = await groq.chat.completions.create({
+      model: "openai/gpt-oss-20b",
+      messages: [
+        {
+          role: "system",
+          content:
+            "You are an assistant that ONLY answers questions related to Sikkim. " +
+            "If a question is unrelated, politely redirect to Sikkim-related info."
+        },
+        {
+          role: "user",
+          content: message,
+        },
+      ],
+      temperature: 0.7,
+      max_completion_tokens: 500,
+    });
+
+    const reply = completion.choices[0].message.content || "No response.";
+    res.json({ reply });
+  } catch (err) {
+    console.error("Groq API Error:", err.message);
+    res.status(500).json({ error: "Error contacting assistant" });
+  }
+});
+
+export default chatrouter;

@@ -371,7 +371,6 @@ export default function Signup() {
         </div>
       </div>
 
-      {/* Custom CSS for animations */}
       <style jsx>{`
         @keyframes float {
           0%, 100% { transform: translateY(0px); }
