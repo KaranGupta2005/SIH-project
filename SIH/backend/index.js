@@ -1,35 +1,29 @@
-import dotenv from "dotenv";
-dotenv.config();
-
 import express from "express";
-
+import dotenv from "dotenv";
+import mongoose from "mongoose";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import connectDB from "./config/db.js"; 
+dotenv.config();
+
 import chatrouter from "./routes/chat.js";
 
-
 const app = express();
-
 connectDB();
-console.log("GROQ_API_KEY:", process.env.GROQ_API_KEY);
 
-app.use(express.json());
+app.use(express.json()); 
 app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser());
-
-app.use(
-  cors({
-    origin: process.env.CLIENT_URL || "http://localhost:5173",
-    credentials: true,
-  })
-);
+app.use(cookieParser()); 
+app.use(cors({
+  origin: process.env.CLIENT_URL || "http://localhost:5173",
+  credentials: true
+}));
 
 app.get("/", (req, res) => {
   res.send("Monastery360 Backend is running 🚀");
 });
 
-// ✅ Chatbot route
+// Chatbot API route
 app.use("/api/chat", chatrouter);
 
 const PORT = process.env.PORT || 5000;
