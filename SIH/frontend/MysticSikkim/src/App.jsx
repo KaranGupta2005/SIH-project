@@ -11,6 +11,7 @@ import Signup from "./pages/Signup";
 import Login from "./pages/Login";
 import FloatingChatbot from "./components/chatbot";
 import ContactUs from "./pages/ContactUs";
+import DashBoard from "./pages/dashboard";
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
             <Route path="/signup" element={<Signup />} />
             <Route path="/login" element={<Login />} />
             <Route path="/contact" element={<ContactUs />} />
+            <Route path="/dashboard" element={<DashBoard />} />
           </Routes>
         </main>
 
