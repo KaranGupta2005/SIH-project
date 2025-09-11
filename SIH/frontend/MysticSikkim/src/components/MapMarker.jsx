@@ -11,7 +11,7 @@ import {
 } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import { motion, AnimatePresence } from "framer-motion"; // ✅ fixed import
+import { motion, AnimatePresence } from "motion/react"; 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -58,7 +58,7 @@ const destinationIcon = new L.Icon({
 });
 
 const userBlackIcon = new L.Icon({
-  iconUrl: "https://cdn-icons-png.flaticon.com/512/64/64113.png", // black marker
+  iconUrl: "https://cdn-icons-png.flaticon.com/512/64/64113.png", 
   iconSize: [32, 32],
   iconAnchor: [16, 32],
 });
