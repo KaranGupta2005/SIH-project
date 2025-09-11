@@ -15,6 +15,7 @@ const ContactUs = () => {
   const [formMessage, setFormMessage] = useState({ text: "", type: "" });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // Particle initialization
   const initParticles = useCallback((canvas) => {
     particlesArrayRef.current = [];
     const numberOfParticles = Math.min(
@@ -41,25 +42,17 @@ const ContactUs = () => {
   }, []);
 
   const updateParticle = useCallback((particle, canvas, mouse) => {
-    if (particle.x > canvas.width || particle.x < 0) {
-      particle.directionX = -particle.directionX;
-    }
-    if (particle.y > canvas.height || particle.y < 0) {
-      particle.directionY = -particle.directionY;
-    }
+    if (particle.x > canvas.width || particle.x < 0) particle.directionX = -particle.directionX;
+    if (particle.y > canvas.height || particle.y < 0) particle.directionY = -particle.directionY;
 
     if (mouse.x !== null && mouse.y !== null) {
       const dx = mouse.x - particle.x;
       const dy = mouse.y - particle.y;
       const distance = Math.sqrt(dx * dx + dy * dy);
-
       if (distance < mouse.radius + particle.size) {
-        const force =
-          (mouse.radius + particle.size - distance) /
-          (mouse.radius + particle.size);
+        const force = (mouse.radius + particle.size - distance) / (mouse.radius + particle.size);
         const forceDirectionX = dx / distance;
         const forceDirectionY = dy / distance;
-
         particle.x -= forceDirectionX * force * 3;
         particle.y -= forceDirectionY * force * 3;
       }
@@ -93,24 +86,17 @@ const ContactUs = () => {
 
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
+    mouseRef.current.radius = Math.min(80, (canvas.height * canvas.width) / 15000);
 
-    mouseRef.current.radius = Math.min(
-      80,
-      (canvas.height * canvas.width) / 15000
-    );
-
-    const handleMouseMove = (event) => {
-      mouseRef.current.x = event.clientX;
-      mouseRef.current.y = event.clientY;
+    const handleMouseMove = (e) => {
+      mouseRef.current.x = e.clientX;
+      mouseRef.current.y = e.clientY;
     };
 
     const handleResize = () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
-      mouseRef.current.radius = Math.min(
-        80,
-        (canvas.height * canvas.width) / 15000
-      );
+      mouseRef.current.radius = Math.min(80, (canvas.height * canvas.width) / 15000);
       initParticles(canvas);
     };
 
@@ -123,28 +109,20 @@ const ContactUs = () => {
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("resize", handleResize);
-      if (animationFrameId.current) {
-        cancelAnimationFrame(animationFrameId.current);
-      }
+      if (animationFrameId.current) cancelAnimationFrame(animationFrameId.current);
     };
   }, [initParticles, animate]);
 
   const handleInputChange = useCallback(
     (e) => {
       const { name, value } = e.target;
-      setFormState((prevState) => ({ ...prevState, [name]: value }));
-
-      if (formMessage.text) {
-        setFormMessage({ text: "", type: "" });
-      }
+      setFormState((prev) => ({ ...prev, [name]: value }));
+      if (formMessage.text) setFormMessage({ text: "", type: "" });
     },
     [formMessage.text]
   );
 
-  const validateEmail = (email) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
+  const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -163,55 +141,48 @@ const ContactUs = () => {
     }
 
     try {
+      // Simulate sending
       await new Promise((resolve) => setTimeout(resolve, 1000));
-      setFormMessage({
-        text: `Thank you, ${formState.name}! We'll be in touch within 24 hours.`,
-        type: "success",
-      });
+      setFormMessage({ text: `Thank you, ${formState.name}! We'll be in touch within 24 hours.`, type: "success" });
       setFormState({ name: "", email: "", message: "" });
-    } catch (error) {
+    } catch {
       setFormMessage({ text: "Something went wrong. Please try again.", type: "error" });
     } finally {
       setIsSubmitting(false);
     }
 
-    setTimeout(() => {
-      setFormMessage({ text: "", type: "" });
-    }, 5000);
+    setTimeout(() => setFormMessage({ text: "", type: "" }), 5000);
   };
 
   const messageClasses = useMemo(() => {
     if (!formMessage.text) return "opacity-0";
-    return formMessage.type === "success"
-      ? "text-green-400 opacity-100"
-      : "text-red-400 opacity-100";
+    return formMessage.type === "success" ? "text-green-400 opacity-100" : "text-red-400 opacity-100";
   }, [formMessage]);
 
   return (
     <>
       <canvas
-        id="particle-canvas"
         ref={canvasRef}
         aria-hidden="true"
         className="fixed top-0 left-0 w-full h-full -z-10"
-      ></canvas>
+      />
 
       <div className="relative min-h-screen w-screen flex items-center justify-center p-4">
-        <div className="absolute inset-0 bg-gradient-to-b from-amber-900/40 via-black/60 to-black/90"></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-amber-900 via-amber-700 to-yellow-600"></div>
 
         <div className="relative z-10 w-full max-w-4xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
-            className="rounded-2xl shadow-2xl overflow-hidden p-8 md:p-12 backdrop-blur-xl bg-black/40 border border-amber-500/30"
+            className="rounded-3xl shadow-2xl overflow-hidden p-8 md:p-12 backdrop-blur-xl bg-black/50 border border-amber-500/40"
           >
             <header className="text-center">
               <motion.h1
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.6 }}
-                className="text-4xl md:text-6xl font-serif font-extrabold text-amber-500 tracking-wide drop-shadow-[0_3px_10px_rgba(0,0,0,0.85)]"
+                className="text-4xl md:text-6xl font-serif font-extrabold text-amber-400 tracking-wide drop-shadow-[0_3px_10px_rgba(0,0,0,0.85)]"
               >
                 Get in Touch
               </motion.h1>
@@ -219,7 +190,7 @@ const ContactUs = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3, duration: 0.6 }}
-                className="mt-4 text-lg md:text-xl font-serif italic bg-gradient-to-r from-amber-400 via-orange-500 to-red-500 bg-clip-text text-transparent drop-shadow-[0_3px_8px_rgba(0,0,0,0.8)]"
+                className="mt-4 text-lg md:text-xl font-serif italic bg-gradient-to-r from-amber-300 via-orange-400 to-yellow-200 bg-clip-text text-transparent drop-shadow-[0_3px_8px_rgba(0,0,0,0.8)]"
               >
                 Let's Start a Conversation
               </motion.p>
@@ -228,38 +199,33 @@ const ContactUs = () => {
             <div className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-start">
               {/* Contact Form */}
               <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
-                <input
-                  type="text"
-                  name="name"
-                  required
-                  placeholder="Your Name"
-                  value={formState.name}
-                  onChange={handleInputChange}
-                  disabled={isSubmitting}
-                  className="form-input w-full px-4 py-3 bg-amber-900/50 rounded-lg text-white placeholder-yellow-200/60 focus:outline-none focus:ring-2 focus:ring-yellow-400 transition-all duration-300 disabled:opacity-50"
-                />
-
-                <input
-                  type="email"
-                  name="email"
-                  required
-                  placeholder="Your Email"
-                  value={formState.email}
-                  onChange={handleInputChange}
-                  disabled={isSubmitting}
-                  className="form-input w-full px-4 py-3 bg-amber-900/50 rounded-lg text-white placeholder-yellow-200/60 focus:outline-none focus:ring-2 focus:ring-yellow-400 transition-all duration-300 disabled:opacity-50"
-                />
-
-                <textarea
-                  name="message"
-                  rows="4"
-                  required
-                  placeholder="Your Message..."
-                  value={formState.message}
-                  onChange={handleInputChange}
-                  disabled={isSubmitting}
-                  className="form-input w-full px-4 py-3 bg-amber-900/50 rounded-lg text-white placeholder-yellow-200/60 focus:outline-none focus:ring-2 focus:ring-yellow-400 transition-all duration-300 resize-none disabled:opacity-50"
-                ></textarea>
+                {["name", "email", "message"].map((field, idx) =>
+                  field === "message" ? (
+                    <textarea
+                      key={idx}
+                      name="message"
+                      rows="4"
+                      required
+                      placeholder="Your Message..."
+                      value={formState.message}
+                      onChange={handleInputChange}
+                      disabled={isSubmitting}
+                      className="form-input w-full px-4 py-3 bg-amber-900/50 rounded-lg text-white placeholder-yellow-200/60 focus:outline-none focus:ring-2 focus:ring-yellow-400 transition-all duration-300 resize-none disabled:opacity-50"
+                    />
+                  ) : (
+                    <input
+                      key={idx}
+                      type={field === "email" ? "email" : "text"}
+                      name={field}
+                      required
+                      placeholder={`Your ${field.charAt(0).toUpperCase() + field.slice(1)}`}
+                      value={formState[field]}
+                      onChange={handleInputChange}
+                      disabled={isSubmitting}
+                      className="form-input w-full px-4 py-3 bg-amber-900/50 rounded-lg text-white placeholder-yellow-200/60 focus:outline-none focus:ring-2 focus:ring-yellow-400 transition-all duration-300 disabled:opacity-50"
+                    />
+                  )
+                )}
 
                 <motion.button
                   whileHover={{ scale: 1.05 }}
