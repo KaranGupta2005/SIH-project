@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { Menu, X } from "lucide-react";
@@ -17,8 +16,8 @@ export default function Navbar() {
 
   const moreLinks = [
     { name: "Travel Guide", path: "/travel-guide" },
-    { name: "User Profile", path: "/signup" }, 
-    { name: "User Login", path: "/login" }, 
+    { name: "User Profile", path: "/signup" },
+    { name: "User Login", path: "/login" },
     { name: "Contact Us", path: "/contact" },
     { name: "Dashboard", path: "/dashboard" },
   ];
@@ -31,12 +30,15 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-6 h-24 flex justify-between items-center">
         {/* Logo */}
         <NavLink to="/" className="flex items-center gap-4">
-          <img
-            src="/Logo.png"
-            alt="MysticSikkim Logo"
-            className="h-20 w-auto object-contain hover:scale-110 transition-transform duration-300 drop-shadow-lg"
-          />
-          <span className="text-3xl lg:text-5xl font-extrabold text-amber-200 tracking-wide drop-shadow-xl hidden sm:block">
+          <div className="h-22 w-22 border-4 border-amber-400 rounded-full overflow-hidden flex items-center justify-center">
+            <img
+              src="/Logo.png"
+              alt="MysticSikkim Logo"
+              className="h-full w-full object-contain hover:scale-110 transition-transform duration-300 drop-shadow-lg"
+            />
+          </div>
+
+          <span className="text-2xl lg:text-4xl font-extrabold text-amber-200 tracking-wide drop-shadow-xl hidden sm:block">
             MysticSikkim
           </span>
         </NavLink>
