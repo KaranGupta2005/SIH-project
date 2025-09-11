@@ -143,8 +143,8 @@ export default function MonasteryMap() {
     .sort((a, b) => (sortBy === "Oldest" ? a.year - b.year : b.popularity - a.popularity));
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-stone-900 via-amber-900 to-stone-800 text-amber-50 pb-12">
-      <div className="pt-24 px-6 relative z-10">
+    <div className="bg-gradient-to-b from-stone-900 via-amber-900 to-stone-800 text-amber-50 pb-12">
+      <div className="pt-12 px-6 relative z-10">
         <h1 className="text-3xl font-extrabold mb-4">Monastery 360 — Sikkim</h1>
         <p className="text-sm text-amber-200 mb-6 max-w-2xl">
           Interactive map with directions. Click a monastery marker to open popup & get directions.
