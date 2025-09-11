@@ -15,7 +15,7 @@ export default function Map() {
 
       {/* Map Section */}
       <main className="flex-1 p-6">
-        <div className="h-[80vh] w-full rounded-2xl overflow-hidden shadow-xl border border-gray-800">
+        <div className="w-full rounded-2xl overflow-hidden shadow-xl border border-gray-800">
           <MapMarker />
         </div>
       </main>
