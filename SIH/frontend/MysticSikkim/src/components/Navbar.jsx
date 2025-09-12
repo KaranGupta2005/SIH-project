@@ -19,7 +19,6 @@ export default function Navbar() {
     { name: "User Profile", path: "/signup" },
     { name: "User Login", path: "/login" },
     { name: "Contact Us", path: "/contact" },
-    { name: "Dashboard", path: "/dashboard" },
   ];
 
   const baseLink =
