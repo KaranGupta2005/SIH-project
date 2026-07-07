@@ -2,6 +2,9 @@ import { useEffect, useState, lazy, Suspense } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { Search, X } from "lucide-react";
 import useOfflineStore from "@/store/offlineStore";
+import useGamificationStore from "@/store/gamificationStore";
+import AudioGuideButton from "@/components/AudioGuideButton";
+import ShareButton from "@/components/ShareButton";
 
 const MonasteryTrail3D = lazy(() => import("@/components/MonasteryTrail3D"));
 
@@ -9,10 +12,28 @@ export default function VirtualTour() {
   const [query, setQuery] = useState("");
   const [openModal, setOpenModal] = useState(null);
   const { monasteries: data, monasteriesLoaded, loadMonasteries } = useOfflineStore();
+  const visitMonastery = useGamificationStore((s) => s.visitMonastery);
+  const unlockBadge = useGamificationStore((s) => s.unlockBadge);
+
+  // Track monastery visit when modal opens
+  useEffect(() => {
+    if (openModal?.name) {
+      visitMonastery(openModal.name);
+    }
+  }, [openModal]);
 
   useEffect(() => {
     if (!monasteriesLoaded) loadMonasteries();
   }, [monasteriesLoaded]);
+
+  // Keyboard: Escape to close modal
+  useEffect(() => {
+    const handleKey = (e) => {
+      if (e.key === "Escape" && openModal) setOpenModal(null);
+    };
+    window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
+  }, [openModal]);
 
   const displayData = query
     ? data.filter((item) => item.name?.toLowerCase().includes(query.toLowerCase()))
@@ -175,6 +196,18 @@ export default function VirtualTour() {
 
                 {/* Info sidebar */}
                 <div className="w-full md:w-[300px] overflow-y-auto border-t md:border-t-0 md:border-l border-amber-800/30 p-5 flex-shrink-0 bg-stone-900">
+                  {/* Audio Guide + Share */}
+                  <div className="flex flex-wrap gap-2 mb-5 pb-4 border-b border-amber-800/20">
+                    <AudioGuideButton
+                      text={openModal.history || (Array.isArray(openModal.description) ? openModal.description.join(". ") : "")}
+                      name={openModal.name}
+                    />
+                    <ShareButton
+                      title={openModal.name}
+                      text={`Explore ${openModal.name} on MysticSikkim — 360° virtual tour of Sikkim's monasteries`}
+                      url={window.location.href}
+                    />
+                  </div>
                   {openModal.history && (
                     <div className="mb-5">
                       <h4 className="text-xs font-semibold text-amber-500 uppercase tracking-wider mb-1.5">History</h4>

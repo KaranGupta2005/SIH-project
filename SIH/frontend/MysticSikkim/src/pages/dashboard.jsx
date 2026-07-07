@@ -3,10 +3,12 @@ import { NavLink } from "react-router-dom";
 import { motion } from "motion/react";
 import useAuthStore from "@/store/authStore";
 import useOfflineStore from "@/store/offlineStore";
+import useGamificationStore from "@/store/gamificationStore";
 import {
   MapPin, Calendar, Heart, Camera, Mountain,
   Plane, Hotel, Star, Clock, Edit, BookOpen,
   Map, Settings, TrendingUp, Compass, LogOut, Wifi, WifiOff,
+  Award, Zap,
 } from "lucide-react";
 
 const daysUntil = (dateString) => {
@@ -43,6 +45,8 @@ export default function Dashboard() {
   const authUser = useAuthStore((s) => s.user);
   const isOnline = useOfflineStore((s) => s.isOnline);
   const { monasteries, monasteriesLoaded, loadMonasteries, lastSync } = useOfflineStore();
+  const { xp, level, unlockedBadges, visitedMonasteries, streakDays, getBadges } = useGamificationStore();
+  const allBadges = getBadges();
 
   useEffect(() => {
     if (!monasteriesLoaded) loadMonasteries();
@@ -160,6 +164,54 @@ export default function Dashboard() {
             </motion.div>
           ))}
         </div>
+
+        {/* Gamification — XP & Badges */}
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.25 }}
+          className="bg-stone-800/40 border border-amber-800/30 rounded-xl p-5 mb-8"
+        >
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-full bg-amber-600/20 flex items-center justify-center border border-amber-600/30">
+                <Zap className="w-4 h-4 text-amber-400" />
+              </div>
+              <div>
+                <p className="text-sm font-bold text-amber-200">Level {level}</p>
+                <p className="text-[10px] text-amber-500/50">{xp} XP · {streakDays} day streak · {visitedMonasteries.length} explored</p>
+              </div>
+            </div>
+            <div className="text-right">
+              <p className="text-xs text-amber-400/60">{xp % 50}/50 XP to next level</p>
+              <div className="w-24 h-1.5 rounded-full bg-stone-700 mt-1 overflow-hidden">
+                <div className="h-full bg-gradient-to-r from-amber-500 to-yellow-400 rounded-full" style={{ width: `${(xp % 50) / 50 * 100}%` }} />
+              </div>
+            </div>
+          </div>
+
+          {/* Badges */}
+          <div className="flex flex-wrap gap-2">
+            {allBadges.map((badge) => {
+              const unlocked = unlockedBadges.includes(badge.id);
+              return (
+                <div
+                  key={badge.id}
+                  className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[11px] border transition-all ${
+                    unlocked
+                      ? "bg-amber-900/40 border-amber-600/40 text-amber-200"
+                      : "bg-stone-700/30 border-stone-600/20 text-stone-500"
+                  }`}
+                  title={badge.desc}
+                >
+                  <Award className={`w-3 h-3 ${unlocked ? "text-amber-400" : "text-stone-600"}`} />
+                  {badge.name}
+                  {unlocked && <span className="text-[9px] text-amber-500/60">+{badge.xp}</span>}
+                </div>
+              );
+            })}
+          </div>
+        </motion.div>
 
         {/* Main Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-8">
