@@ -20,7 +20,7 @@ export default function Admin() {
 
   const fetchDashboard = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/admin/dashboard", {
+      const res = await fetch("/api/admin/dashboard", {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (!res.ok) throw new Error();

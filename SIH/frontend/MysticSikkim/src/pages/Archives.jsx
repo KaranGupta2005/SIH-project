@@ -110,7 +110,7 @@ export default function Archives() {
   useEffect(() => {
     if (activeTab === "gallery" && wikiImages.length === 0) {
       setWikiLoading(true);
-      fetch("http://localhost:5000/api/wikidata/images?category=Buddhist_monasteries_in_Sikkim")
+      fetch("/api/wikidata/images?category=Buddhist_monasteries_in_Sikkim")
         .then((r) => r.json())
         .then((data) => setWikiImages(data.images || []))
         .catch(() => setWikiImages([]))

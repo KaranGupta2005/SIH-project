@@ -2,9 +2,14 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import { fileURLToPath } from "url";
+import { dirname, join } from "path";
 import connectDB from "./config/db.js";
 
 dotenv.config();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 import chatrouter from "./routes/chat.js";
 import authRouter from "./routes/auth.js";
@@ -28,11 +33,7 @@ app.use(
   })
 );
 
-app.get("/", (req, res) => {
-  res.send("Monastery360 Backend is running 🚀");
-});
-
-// Routes
+// API Routes
 app.use("/api/chat", chatrouter);
 app.use("/api/auth", authRouter);
 app.use("/api/monasteries", monasteriesRouter);
@@ -41,6 +42,18 @@ app.use("/api/reviews", reviewsRouter);
 app.use("/api/trips", tripsRouter);
 app.use("/api/analytics", analyticsRouter);
 app.use("/api/admin", adminRouter);
+
+// Serve frontend build in production
+const frontendPath = join(__dirname, "../frontend/MysticSikkim/dist");
+app.use(express.static(frontendPath));
+
+// SPA fallback — serve index.html for all non-API routes
+app.get("*", (req, res) => {
+  if (req.path.startsWith("/api")) {
+    return res.status(404).json({ error: "API route not found" });
+  }
+  res.sendFile(join(frontendPath, "index.html"));
+});
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
