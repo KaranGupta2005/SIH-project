@@ -48,7 +48,7 @@ const frontendPath = join(__dirname, "../frontend/MysticSikkim/dist");
 app.use(express.static(frontendPath));
 
 // SPA fallback — serve index.html for all non-API routes
-app.get("*", (req, res) => {
+app.get("/{*splat}", (req, res) => {
   if (req.path.startsWith("/api")) {
     return res.status(404).json({ error: "API route not found" });
   }
