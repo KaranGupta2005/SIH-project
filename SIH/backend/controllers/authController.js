@@ -17,7 +17,7 @@ const cookieOptions = {
 // POST /api/auth/signup
 export const signup = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password, role } = req.body;
 
     if (!name || !email || !password) {
       return res.status(400).json({ error: "All fields are required" });
@@ -32,7 +32,8 @@ export const signup = async (req, res) => {
       return res.status(400).json({ error: "Email already registered" });
     }
 
-    const user = await User.create({ name, email, password });
+    const userRole = ["user", "admin"].includes(role) ? role : "user";
+    const user = await User.create({ name, email, password, role: userRole });
     const token = generateToken(user._id);
 
     res.cookie("token", token, cookieOptions);

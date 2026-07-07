@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from "motion/react";
 import { Search, X } from "lucide-react";
 import useOfflineStore from "@/store/offlineStore";
 import useGamificationStore from "@/store/gamificationStore";
+import useLanguageStore from "@/store/languageStore";
 import AudioGuideButton from "@/components/AudioGuideButton";
 import ShareButton from "@/components/ShareButton";
 
@@ -14,6 +15,7 @@ export default function VirtualTour() {
   const { monasteries: data, monasteriesLoaded, loadMonasteries } = useOfflineStore();
   const visitMonastery = useGamificationStore((s) => s.visitMonastery);
   const unlockBadge = useGamificationStore((s) => s.unlockBadge);
+  const t = useLanguageStore((s) => s.t);
 
   // Track monastery visit when modal opens
   useEffect(() => {
@@ -45,10 +47,10 @@ export default function VirtualTour() {
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-4xl md:text-5xl font-extrabold text-amber-200 tracking-tight">
-            360° Virtual Tour
+            {t("heroTitle")}
           </h1>
           <p className="mt-3 text-amber-400/70 max-w-xl mx-auto">
-            Step inside Sikkim's ancient monasteries. Explore their history, architecture, and spiritual significance.
+            {t("heroDesc")}
           </p>
         </div>
 
@@ -58,7 +60,7 @@ export default function VirtualTour() {
             <Search className="w-4 h-4 text-amber-500" />
             <input
               type="text"
-              placeholder="Search monasteries..."
+              placeholder={`${t("search")}...`}
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               className="flex-1 bg-transparent text-amber-100 placeholder-amber-600/60 text-sm focus:outline-none"
@@ -123,12 +125,12 @@ export default function VirtualTour() {
                   {el.timings && (
                     <p className="mt-3 text-xs text-amber-600/50">{el.timings}</p>
                   )}
-                  <span className="inline-block mt-4 text-xs text-amber-500 font-medium">View 360° →</span>
+                  <span className="inline-block mt-4 text-xs text-amber-500 font-medium">{t("viewTour")} →</span>
                 </div>
               </motion.div>
             ))
           ) : (
-            <p className="col-span-full text-center text-amber-500/50 py-12">No monasteries found.</p>
+            <p className="col-span-full text-center text-amber-500/50 py-12">{t("noResults")}</p>
           )}
         </div>
       </div>
@@ -210,14 +212,14 @@ export default function VirtualTour() {
                   </div>
                   {openModal.history && (
                     <div className="mb-5">
-                      <h4 className="text-xs font-semibold text-amber-500 uppercase tracking-wider mb-1.5">History</h4>
+                      <h4 className="text-xs font-semibold text-amber-500 uppercase tracking-wider mb-1.5">{t("history")}</h4>
                       <p className="text-amber-100/80 text-sm leading-relaxed">{openModal.history}</p>
                     </div>
                   )}
 
                   {Array.isArray(openModal.description) && (
                     <div className="mb-5">
-                      <h4 className="text-xs font-semibold text-amber-500 uppercase tracking-wider mb-1.5">Highlights</h4>
+                      <h4 className="text-xs font-semibold text-amber-500 uppercase tracking-wider mb-1.5">{t("highlights")}</h4>
                       <ul className="space-y-1.5">
                         {openModal.description.map((line, idx) => (
                           <li key={idx} className="text-amber-100/70 text-xs pl-3 border-l-2 border-amber-700/40 leading-relaxed">
@@ -230,14 +232,14 @@ export default function VirtualTour() {
 
                   {openModal.timings && (
                     <div className="mb-5">
-                      <h4 className="text-xs font-semibold text-amber-500 uppercase tracking-wider mb-1.5">Timings</h4>
+                      <h4 className="text-xs font-semibold text-amber-500 uppercase tracking-wider mb-1.5">{t("timings")}</h4>
                       <p className="text-amber-100/80 text-sm">{openModal.timings}</p>
                     </div>
                   )}
 
                   {openModal.nearby?.length > 0 && (
                     <div>
-                      <h4 className="text-xs font-semibold text-amber-500 uppercase tracking-wider mb-1.5">Nearby</h4>
+                      <h4 className="text-xs font-semibold text-amber-500 uppercase tracking-wider mb-1.5">{t("nearby")}</h4>
                       <div className="flex flex-wrap gap-1.5">
                         {openModal.nearby.map((place, i) => (
                           <span key={i} className="text-[11px] px-2 py-0.5 rounded-full bg-amber-900/30 text-amber-300/80 border border-amber-700/20">

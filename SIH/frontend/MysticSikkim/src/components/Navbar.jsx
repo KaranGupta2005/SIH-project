@@ -11,7 +11,7 @@ export default function Navbar() {
   const location = useLocation();
   const navigate = useNavigate();
   const { user, logout } = useAuthStore();
-  const { currentLang, setLang, languages } = useLanguageStore();
+  const { currentLang, setLang, languages, t } = useLanguageStore();
 
   useEffect(() => {
     setMobileOpen(false);
@@ -88,7 +88,7 @@ export default function Navbar() {
               `${baseLink} ${isActive ? "text-white font-semibold" : ""}`
             }
           >
-            Home
+            {t("home")}
           </NavLink>
 
           {/* Dropdown nav items */}
@@ -187,13 +187,13 @@ export default function Navbar() {
                   to="/dashboard"
                   className="block px-3 py-2 rounded-lg text-sm text-amber-200 hover:bg-amber-900/40 transition-colors"
                 >
-                  Dashboard
+                  {t("dashboard")}
                 </NavLink>
                 <button
                   onClick={handleLogout}
                   className="w-full text-left px-3 py-2 rounded-lg text-sm text-red-300 hover:bg-red-900/20 transition-colors mt-1"
                 >
-                  Logout
+                  {t("logout")}
                 </button>
               </div>
             </div>
@@ -203,13 +203,13 @@ export default function Navbar() {
                 to="/login"
                 className="px-4 py-2 text-sm font-medium text-amber-300 hover:text-amber-100 transition-colors"
               >
-                Login
+                {t("login")}
               </NavLink>
               <NavLink
                 to="/signup"
                 className="px-5 py-2 text-sm font-semibold bg-amber-600 hover:bg-amber-500 text-white rounded-lg shadow-lg transition-all hover:shadow-amber-600/30"
               >
-                Sign Up
+                {t("signup")}
               </NavLink>
             </>
           )}
@@ -239,7 +239,7 @@ export default function Navbar() {
               `block text-lg py-2 transition-all ${isActive ? "font-bold text-amber-400" : "text-amber-200 hover:text-amber-100"}`
             }
           >
-            Home
+            {t("home")}
           </NavLink>
 
           {navItems.map((section) => (

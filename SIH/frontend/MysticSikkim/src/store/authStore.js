@@ -8,14 +8,14 @@ const useAuthStore = create((set, get) => ({
   loading: false,
   error: null,
 
-  signup: async ({ name, email, password }) => {
+  signup: async ({ name, email, password, role }) => {
     set({ loading: true, error: null });
     try {
       const res = await fetch(`${API_BASE}/auth/signup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
-        body: JSON.stringify({ name, email, password }),
+        body: JSON.stringify({ name, email, password, role }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Signup failed");

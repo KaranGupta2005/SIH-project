@@ -1,13 +1,15 @@
 import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import useAuthStore from "@/store/authStore";
+import useLanguageStore from "@/store/languageStore";
 
 export default function Signup() {
-  const [formData, setFormData] = useState({ name: "", email: "", password: "" });
+  const [formData, setFormData] = useState({ name: "", email: "", password: "", role: "user" });
   const [error, setError] = useState("");
   const [focusedField, setFocusedField] = useState("");
   const navigate = useNavigate();
   const { signup, loading } = useAuthStore();
+  const t = useLanguageStore((s) => s.t);
 
   const handleChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -53,10 +55,10 @@ export default function Signup() {
               <img src="/Logo.png" alt="MysticSikkim" className="w-full h-full object-cover" />
             </div>
             <h3 className="text-white text-3xl font-bold mb-4 bg-gradient-to-r from-amber-300 to-yellow-300 bg-clip-text text-transparent">
-              Begin Your Journey
+              {t("createAccount")}
             </h3>
             <p className="text-amber-200/70 text-lg max-w-sm text-center leading-relaxed">
-              Join thousands exploring Sikkim's sacred heritage through immersive virtual tours and cultural guides.
+              {t("signupDesc")}
             </p>
             <div className="mt-8 text-center">
               <p className="text-amber-400/50 text-sm italic">
@@ -69,16 +71,16 @@ export default function Signup() {
           <div className="flex-1 flex flex-col justify-center p-8 md:p-14 bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-md">
             <div className="text-center mb-8">
               <h2 className="text-3xl font-bold text-white mb-3 bg-gradient-to-r from-amber-300 via-yellow-300 to-amber-300 bg-clip-text text-transparent">
-                Create Your Account
+                {t("createAccount")}
               </h2>
-              <p className="text-amber-200/60">Start exploring Sikkim's sacred heritage</p>
+              <p className="text-amber-200/60">{t("signupDesc")}</p>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-5">
               {[
-                { field: "name", placeholder: "Full Name", type: "text" },
-                { field: "email", placeholder: "Email Address", type: "email" },
-                { field: "password", placeholder: "Password (min 6 chars)", type: "password" },
+                { field: "name", placeholder: t("fullName"), type: "text" },
+                { field: "email", placeholder: t("email"), type: "email" },
+                { field: "password", placeholder: `${t("password")} (min 6)`, type: "password" },
               ].map(({ field, placeholder, type }) => (
                 <div key={field} className="relative">
                   <input
@@ -99,6 +101,20 @@ export default function Signup() {
                 </div>
               ))}
 
+              {/* Role selector */}
+              <div className="relative">
+                <label className="block text-xs text-amber-300/60 mb-1.5 ml-1">{t("role")}</label>
+                <select
+                  name="role"
+                  value={formData.role}
+                  onChange={handleChange}
+                  className="w-full px-5 py-4 bg-white/10 backdrop-blur-md border-2 border-white/15 rounded-2xl text-white focus:outline-none focus:border-amber-400 transition-all duration-300 appearance-none cursor-pointer"
+                >
+                  <option value="user" className="bg-stone-900 text-white">{t("user")}</option>
+                  <option value="admin" className="bg-stone-900 text-white">{t("adminRole")}</option>
+                </select>
+              </div>
+
               <button
                 type="submit"
                 disabled={loading}
@@ -111,10 +127,10 @@ export default function Signup() {
                 {loading ? (
                   <div className="flex items-center justify-center gap-3">
                     <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                    Creating Account...
+                    {t("creatingAccount")}
                   </div>
                 ) : (
-                  "Sign Up"
+                  t("signup")
                 )}
               </button>
 
@@ -125,12 +141,12 @@ export default function Signup() {
               )}
 
               <div className="text-center pt-5 border-t border-white/10">
-                <p className="text-amber-200/50 text-sm mb-2">Already have an account?</p>
+                <p className="text-amber-200/50 text-sm mb-2">{t("haveAccount")}</p>
                 <NavLink
                   to="/login"
                   className="text-amber-400 font-semibold hover:text-yellow-300 transition-colors"
                 >
-                  Login →
+                  {t("login")} →
                 </NavLink>
               </div>
             </form>
