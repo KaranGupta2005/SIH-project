@@ -1,219 +1,295 @@
-// Dashboard.jsx
-import { useState } from "react";
-import { 
-  MapPin, 
-  Calendar, 
-  Heart, 
-  Camera, 
-  Mountain, 
-  Plane, 
-  Hotel,
-  Star,
-  Clock,
-  Edit,
-  BookOpen,
-  Map,
-  Settings
+import { useState, useMemo, useEffect } from "react";
+import { NavLink } from "react-router-dom";
+import { motion } from "motion/react";
+import useAuthStore from "@/store/authStore";
+import useOfflineStore from "@/store/offlineStore";
+import {
+  MapPin, Calendar, Heart, Camera, Mountain,
+  Plane, Hotel, Star, Clock, Edit, BookOpen,
+  Map, Settings, TrendingUp, Compass, LogOut, Wifi, WifiOff,
 } from "lucide-react";
 
 const daysUntil = (dateString) => {
-  const tripDate = new Date(dateString);
+  const trip = new Date(dateString);
   const today = new Date();
-  const differenceInTime = tripDate.getTime() - today.getTime();
-  const differenceInDays = Math.ceil(differenceInTime / (1000 * 3600 * 24));
-  if (differenceInDays < 0) return "Past";
-  if (differenceInDays === 0) return "Today!";
-  if (differenceInDays === 1) return "Tomorrow";
-  return `in ${differenceInDays} days`;
+  const diff = Math.ceil((trip - today) / (1000 * 3600 * 24));
+  if (diff < 0) return "Past";
+  if (diff === 0) return "Today!";
+  if (diff === 1) return "Tomorrow";
+  return `in ${diff} days`;
 };
 
+// Animated counter
+function AnimatedNumber({ value, duration = 1000 }) {
+  const [display, setDisplay] = useState(0);
+  useEffect(() => {
+    let start = 0;
+    const step = value / (duration / 16);
+    const timer = setInterval(() => {
+      start += step;
+      if (start >= value) {
+        setDisplay(value);
+        clearInterval(timer);
+      } else {
+        setDisplay(Math.floor(start));
+      }
+    }, 16);
+    return () => clearInterval(timer);
+  }, [value, duration]);
+  return <span>{display}</span>;
+}
+
 export default function Dashboard() {
+  const authUser = useAuthStore((s) => s.user);
+  const isOnline = useOfflineStore((s) => s.isOnline);
+  const { monasteries, monasteriesLoaded, loadMonasteries, lastSync } = useOfflineStore();
+
+  useEffect(() => {
+    if (!monasteriesLoaded) loadMonasteries();
+  }, [monasteriesLoaded]);
+
   const [user] = useState({
-    name: "Varun",
-    avatar: "/Logo.png",
-    joinDate: "March 2024",
+    name: authUser?.name || "Explorer",
+    avatar: authUser?.avatar || "/Logo.png",
+    joinDate: authUser?.createdAt ? new Date(authUser.createdAt).toLocaleDateString("en-US", { month: "long", year: "numeric" }) : "July 2025",
     tripsCompleted: 3,
     placesVisited: 12,
     daysExplored: 15,
-    contributorLevel: "Sikkim Explorer"
+    contributorLevel: "Sikkim Explorer",
   });
 
-  const [recentActivities] = useState([
-    { id: 1, type: "review", place: "Tsomgo Lake", date: "2 days ago", rating: 5, link: "#" },
-    { id: 2, type: "booking", place: "Mayfair Spa Resort", date: "1 week ago", status: "confirmed", link: "#" },
-    { id: 3, type: "photo", place: "Nathula Pass", date: "2 weeks ago", photoCount: 12, link: "#" }
+  const [upcomingTrips] = useState([
+    { id: 1, destination: "Pelling", date: "2025-10-15", status: "confirmed", days: 3 },
+    { id: 2, destination: "Yuksom", date: "2025-11-05", status: "pending", days: 2 },
+    { id: 3, destination: "Lachung", date: "2025-12-20", status: "pending", days: 4 },
   ]);
 
-  const [upcomingTrips] = useState([
-    { id: 1, destination: "Pelling", date: "2025-10-15", status: "confirmed" },
-    { id: 2, destination: "Yuksom", date: "2025-11-05", status: "pending" }
+  const [recentActivity] = useState([
+    { id: 1, text: "Explored Rumtek Monastery virtual tour", time: "2 days ago", type: "tour" },
+    { id: 2, text: "Saved Gurudongmar Lake to wishlist", time: "1 week ago", type: "save" },
+    { id: 3, text: "Used AI guide for Phodong history", time: "1 week ago", type: "ai" },
+    { id: 4, text: "Viewed Tashiding archives", time: "2 weeks ago", type: "archive" },
   ]);
 
   const [savedPlaces] = useState([
-    { id: 1, name: "Gurudongmar Lake", image: "https://imgs.search.brave.com/VXF2s9yk6Ns6jY-vzS2Eay3EJmnI3FTeth8fBYhqqX8/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9ibG9n/LnRvdXJpc21zaWtr/aW0uaW4vd3AtY29u/dGVudC91cGxvYWRz/LzIwMjEvMTAvZ3Vy/dWRvbmdtYXItMzAw/eDIxMC5qcGc", category: "High-Altitude Lake" },
+    { id: 1, name: "Gurudongmar Lake", image: "https://imgs.search.brave.com/VXF2s9yk6Ns6jY-vzS2Eay3EJmnI3FTeth8fBYhqqX8/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9ibG9n/LnRvdXJpc21zaWtr/aW0uaW4vd3AtY29u/dGVudC91cGxvYWRz/LzIwMjEvMTAvZ3Vy/dWRvbmdtYXItMzAw/eDIxMC5qcGc", category: "Lake" },
     { id: 2, name: "Rumtek Monastery", image: "https://static.toiimg.com/thumb/msid-48330676,width-550,height-433/48330676.jpg", category: "Monastery" },
-    { id: 3, name: "Yumthang Valley", image: "https://imgs.search.brave.com/gq7anSue6mKGYmbh_w5U9ZydReqT-oaHQ96Ouey4Cck/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly91cGxv/YWQud2lraW1lZGlh/Lm9yZy93aWtpcGVk/aWEvY29tbW9ucy8w/LzA1L1l1bXRoYW5n/X1ZhbGxleV8yLmpw/Zw", category: "Valley of Flowers" }
+    { id: 3, name: "Yumthang Valley", image: "https://imgs.search.brave.com/gq7anSue6mKGYmbh_w5U9ZydReqT-oaHQ96Ouey4Cck/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly91cGxv/YWQud2lraW1lZGlh/Lm9yZy93aWtpcGVk/aWEvY29tbW9ucy8w/LzA1L1l1bXRoYW5n/X1ZhbGxleV8yLmpw/Zw", category: "Valley" },
+    { id: 4, name: "Tashiding Monastery", image: "https://upload.wikimedia.org/wikipedia/commons/a/af/Tashiding_Monastery_in_West_Sikkim_05.jpg", category: "Monastery" },
   ]);
 
+  const progress = useMemo(() => Math.min((user.placesVisited / 20) * 100, 100), [user.placesVisited]);
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#fdf6e8] to-[#f7eace] p-6 pt-28">
-      <div className="max-w-7xl mx-auto">
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-[#3a1a0d] mb-2">Your Mystic Dashboard, {user.name}! 🏔️</h1>
-          <p className="text-amber-800 text-lg">This is your command center for all things Sikkim.</p>
+    <div className="min-h-screen bg-gradient-to-b from-stone-900 via-amber-950 to-stone-900 text-amber-50 pb-16">
+      <div className="max-w-7xl mx-auto px-6 pt-8">
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="flex flex-col md:flex-row md:items-center md:justify-between gap-5 mb-8"
+        >
+          <div className="flex items-center gap-4">
+            <div className="relative">
+              <img
+                src={user.avatar}
+                alt={user.name}
+                className="h-16 w-16 rounded-full border-2 border-amber-500/60 object-cover shadow-lg"
+              />
+              <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-amber-500 rounded-full flex items-center justify-center">
+                <TrendingUp className="h-3 w-3 text-black" />
+              </div>
+            </div>
+            <div>
+              <h1 className="text-2xl md:text-3xl font-bold text-amber-100">
+                Namaste, {user.name}! 🏔️
+              </h1>
+              <div className="flex items-center gap-3 mt-1">
+                <span className="text-xs text-amber-400/60">{user.contributorLevel}</span>
+                <span className="text-xs text-amber-600/40">·</span>
+                <span className="flex items-center gap-1 text-xs">
+                  {isOnline ? <Wifi className="w-3 h-3 text-green-400" /> : <WifiOff className="w-3 h-3 text-red-400" />}
+                  <span className={isOnline ? "text-green-400" : "text-red-400"}>{isOnline ? "Online" : "Offline"}</span>
+                </span>
+              </div>
+              {/* Progress bar */}
+              <div className="mt-2 flex items-center gap-2">
+                <div className="w-32 h-1.5 rounded-full bg-stone-700 overflow-hidden">
+                  <motion.div
+                    initial={{ width: 0 }}
+                    animate={{ width: `${progress}%` }}
+                    transition={{ duration: 1.2, delay: 0.3 }}
+                    className="h-full bg-gradient-to-r from-amber-500 to-yellow-400 rounded-full"
+                  />
+                </div>
+                <span className="text-[10px] text-amber-500/60">{user.placesVisited}/20</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex gap-2">
+            <NavLink to="/exploremap" className="px-4 py-2 bg-amber-600 hover:bg-amber-500 text-white text-sm rounded-lg font-medium transition-all shadow-md">
+              Start Exploring
+            </NavLink>
+            <NavLink to="/virtualtour" className="px-4 py-2 border border-amber-700/50 text-amber-300 text-sm rounded-lg font-medium hover:bg-amber-900/30 transition-all">
+              Virtual Tour
+            </NavLink>
+          </div>
+        </motion.div>
+
+        {/* Stats */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8">
+          {[
+            { label: "Trips", value: user.tripsCompleted, icon: Mountain },
+            { label: "Places Visited", value: user.placesVisited, icon: MapPin },
+            { label: "Days Explored", value: user.daysExplored, icon: Compass },
+            { label: "Monasteries Available", value: monasteries.length, icon: Star },
+          ].map((stat, i) => (
+            <motion.div
+              key={stat.label}
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 + i * 0.08 }}
+              className="bg-stone-800/50 border border-amber-800/30 rounded-xl p-4 group hover:border-amber-600/40 transition-all"
+            >
+              <stat.icon className="h-4 w-4 text-amber-500/70 mb-2" />
+              <p className="text-2xl font-bold text-amber-100">
+                <AnimatedNumber value={stat.value} />
+              </p>
+              <p className="text-[11px] text-amber-500/50 mt-0.5">{stat.label}</p>
+            </motion.div>
+          ))}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <div className="group relative bg-gradient-to-br from-amber-50 to-orange-100 rounded-xl p-6 shadow-lg border border-amber-200 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
-            <div className="flex justify-between items-start">
-              <div>
-                <p className="text-amber-800 text-sm font-medium">Trips Completed</p>
-                <p className="text-4xl font-bold text-[#3a1a0d] mt-1">{user.tripsCompleted}</p>
-              </div>
-              <Mountain className="h-8 w-8 text-amber-600 group-hover:scale-110 transition-transform" />
-            </div>
-            <div className="mt-4">
-              <p className="text-amber-800 text-sm font-medium">Days Explored</p>
-              <p className="text-xl font-semibold text-[#3a1a0d]">{user.daysExplored}</p>
-            </div>
-            <a href="#" className="absolute bottom-4 right-4 text-xs text-amber-700 font-semibold opacity-0 group-hover:opacity-100 transition-opacity">View History →</a>
-          </div>
-
-          <div className="group relative bg-gradient-to-br from-amber-50 to-orange-100 rounded-xl p-6 shadow-lg border border-amber-200 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
-            <div className="flex justify-between items-start">
-              <div>
-                <p className="text-amber-800 text-sm font-medium">Places Visited</p>
-                <p className="text-4xl font-bold text-[#3a1a0d] mt-1">{user.placesVisited}</p>
-              </div>
-              <MapPin className="h-8 w-8 text-amber-600 group-hover:scale-110 transition-transform" />
-            </div>
-            <div className="mt-4">
-              <p className="text-amber-800 text-sm font-medium">Highest Altitude</p>
-              <p className="text-xl font-semibold text-[#3a1a0d]">17,800 ft</p>
-            </div>
-            <a href="#" className="absolute bottom-4 right-4 text-xs text-amber-700 font-semibold opacity-0 group-hover:opacity-100 transition-opacity">View Journal →</a>
-          </div>
-
-          <div className="group relative bg-gradient-to-br from-amber-50 to-orange-100 rounded-xl p-6 shadow-lg border border-amber-200 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
-            <div className="flex justify-between items-start">
-              <div>
-                <p className="text-amber-800 text-sm font-medium">Saved Places</p>
-                <p className="text-4xl font-bold text-[#3a1a0d] mt-1">{savedPlaces.length}</p>
-              </div>
-              <Heart className="h-8 w-8 text-amber-600 group-hover:scale-110 transition-transform" />
-            </div>
-            <div className="mt-4">
-              <p className="text-amber-800 text-sm font-medium">Categories</p>
-              <p className="text-xl font-semibold text-[#3a1a0d]">3</p>
-            </div>
-            <a href="#saved-places" className="absolute bottom-4 right-4 text-xs text-amber-700 font-semibold opacity-0 group-hover:opacity-100 transition-opacity">View Wishlist →</a>
-          </div>
-
-          <div className="group relative bg-gradient-to-br from-amber-50 to-orange-100 rounded-xl p-6 shadow-lg border border-amber-200 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col items-center text-center">
-            <img src={user.avatar} alt="User Avatar" className="h-16 w-16 rounded-full border-2 border-amber-300 object-cover mb-3"/>
-            <p className="text-lg font-bold text-[#3a1a0d]">{user.contributorLevel}</p>
-            <p className="text-xs text-amber-700">Member since {user.joinDate}</p>
-            <a href="#" className="absolute top-3 right-3 text-amber-600 hover:text-[#3a1a0d] opacity-0 group-hover:opacity-100 transition-opacity"><Edit size={18} /></a>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-lg border border-amber-200">
+        {/* Main Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-8">
+          {/* Upcoming Trips */}
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            className="bg-stone-800/40 border border-amber-800/30 rounded-xl p-5"
+          >
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-semibold text-[#3a1a0d]">Upcoming Trips</h2>
-              <Calendar className="h-5 w-5 text-amber-700" />
+              <h3 className="text-sm font-bold text-amber-200">Upcoming Trips</h3>
+              <Calendar className="h-4 w-4 text-amber-600/60" />
             </div>
-            <div className="space-y-4">
+            <div className="space-y-2.5">
               {upcomingTrips.map((trip) => (
-                <div key={trip.id} className="p-4 bg-amber-50/50 rounded-lg hover:bg-amber-100/60 transition-colors">
+                <div key={trip.id} className="p-3 bg-stone-700/30 border border-amber-900/20 rounded-lg">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="font-medium text-amber-900">{trip.destination}</p>
-                      <p className="text-sm text-amber-700">{daysUntil(trip.date)}</p>
+                      <p className="text-sm font-medium text-amber-100">{trip.destination}</p>
+                      <p className="text-[11px] text-amber-500/50 mt-0.5">{daysUntil(trip.date)} · {trip.days} days</p>
                     </div>
-                    <span className={`px-3 py-1 rounded-full text-xs font-medium ${trip.status === 'confirmed' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}`}>{trip.status}</span>
+                    <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${
+                      trip.status === "confirmed" ? "bg-green-900/40 text-green-300 border border-green-700/30" : "bg-yellow-900/40 text-yellow-300 border border-yellow-700/30"
+                    }`}>
+                      {trip.status}
+                    </span>
                   </div>
-                  <a href="#" className="text-xs text-amber-800 font-semibold mt-2 inline-block hover:underline">Manage →</a>
                 </div>
               ))}
-              <button className="w-full py-3 bg-amber-600 text-white rounded-lg font-semibold hover:bg-amber-700 transition-all shadow-md hover:shadow-lg">+ Plan a New Mystic Trip</button>
             </div>
-          </div>
+            <NavLink to="/calendar" className="block mt-4 text-center py-2.5 bg-amber-700/80 hover:bg-amber-600 text-white text-xs rounded-lg font-semibold transition-all">
+              + Plan New Trip
+            </NavLink>
+          </motion.div>
 
-          <div className="bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-lg border border-amber-200">
+          {/* Recent Activity */}
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4 }}
+            className="bg-stone-800/40 border border-amber-800/30 rounded-xl p-5"
+          >
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-semibold text-[#3a1a0d]">Recent Activity</h2>
-              <Clock className="h-5 w-5 text-amber-700" />
+              <h3 className="text-sm font-bold text-amber-200">Recent Activity</h3>
+              <Clock className="h-4 w-4 text-amber-600/60" />
             </div>
             <div className="space-y-1">
-              {recentActivities.map((activity) => (
-                <a href={activity.link} key={activity.id} className="flex items-center space-x-4 p-3 rounded-lg hover:bg-amber-50/50 transition-colors">
-                  <div className="flex-shrink-0 bg-amber-100/80 p-2 rounded-full">
-                    {activity.type === 'review' && <Star className="h-5 w-5 text-yellow-600" />}
-                    {activity.type === 'booking' && <Hotel className="h-5 w-5 text-cyan-600" />}
-                    {activity.type === 'photo' && <Camera className="h-5 w-5 text-purple-600" />}
+              {recentActivity.map((item) => (
+                <div key={item.id} className="flex items-start gap-3 p-2.5 rounded-lg hover:bg-stone-700/30 transition-colors">
+                  <div className="w-2 h-2 rounded-full bg-amber-500 mt-1.5 flex-shrink-0" />
+                  <div>
+                    <p className="text-xs text-amber-100/80 leading-relaxed">{item.text}</p>
+                    <p className="text-[10px] text-amber-600/40 mt-0.5">{item.time}</p>
                   </div>
-                  <div className="flex-1">
-                    <p className="text-sm font-medium text-amber-900">
-                      {activity.type === 'review' && `You reviewed ${activity.place}`}
-                      {activity.type === 'booking' && `Booked ${activity.place}`}
-                      {activity.type === 'photo' && `Added ${activity.photoCount} photos of ${activity.place}`}
-                    </p>
-                    <p className="text-xs text-amber-700">{activity.date}</p>
-                  </div>
-                </a>
+                </div>
               ))}
             </div>
-          </div>
+          </motion.div>
 
-          <div className="bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-lg border border-amber-200">
-            <h2 className="text-xl font-semibold text-[#3a1a0d] mb-4">Quick Actions</h2>
-            <div className="grid grid-cols-2 gap-4">
-              <button className="flex flex-col items-center justify-center p-4 bg-amber-100/50 rounded-lg hover:bg-amber-100 hover:scale-105 transition-all">
-                <Map className="h-6 w-6 text-orange-600 mb-2" />
-                <span className="text-sm font-medium text-amber-900">Explore Map</span>
-              </button>
-              <button className="flex flex-col items-center justify-center p-4 bg-amber-100/50 rounded-lg hover:bg-amber-100 hover:scale-105 transition-all">
-                <BookOpen className="h-6 w-6 text-green-600 mb-2" />
-                <span className="text-sm font-medium text-amber-900">Travel Guide</span>
-              </button>
-              <button className="flex flex-col items-center justify-center p-4 bg-amber-100/50 rounded-lg hover:bg-amber-100 hover:scale-105 transition-all">
-                <Plane className="h-6 w-6 text-blue-600 mb-2" />
-                <span className="text-sm font-medium text-amber-900">Plan Trip</span>
-              </button>
-              <button className="flex flex-col items-center justify-center p-4 bg-amber-100/50 rounded-lg hover:bg-amber-100 hover:scale-105 transition-all">
-                <Settings className="h-6 w-6 text-gray-600 mb-2" />
-                <span className="text-sm font-medium text-amber-900">Settings</span>
-              </button>
+          {/* Quick Actions */}
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
+            className="bg-stone-800/40 border border-amber-800/30 rounded-xl p-5"
+          >
+            <h3 className="text-sm font-bold text-amber-200 mb-4">Quick Actions</h3>
+            <div className="grid grid-cols-2 gap-2.5">
+              {[
+                { icon: Map, label: "Map", to: "/exploremap", color: "text-orange-400" },
+                { icon: Mountain, label: "Tours", to: "/virtualtour", color: "text-amber-400" },
+                { icon: BookOpen, label: "Archives", to: "/archives", color: "text-green-400" },
+                { icon: Calendar, label: "Calendar", to: "/calendar", color: "text-blue-400" },
+                { icon: Plane, label: "Travel Guide", to: "/travel-guide", color: "text-cyan-400" },
+                { icon: Settings, label: "Settings", to: "#", color: "text-gray-400" },
+              ].map((action) => (
+                <NavLink
+                  key={action.label}
+                  to={action.to}
+                  className="flex flex-col items-center justify-center p-3 bg-stone-700/30 border border-amber-900/20 rounded-lg hover:bg-amber-900/20 hover:border-amber-700/40 transition-all"
+                >
+                  <action.icon className={`h-5 w-5 ${action.color} mb-1.5`} />
+                  <span className="text-[11px] font-medium text-amber-200/80">{action.label}</span>
+                </NavLink>
+              ))}
             </div>
-          </div>
+
+            {/* Sync status */}
+            {lastSync && (
+              <div className="mt-4 pt-3 border-t border-amber-800/20 text-center">
+                <p className="text-[10px] text-amber-600/40">
+                  Last synced: {new Date(lastSync).toLocaleTimeString()}
+                </p>
+              </div>
+            )}
+          </motion.div>
         </div>
 
-        <div id="saved-places" className="mt-8 bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-lg border border-amber-200">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-semibold text-[#3a1a0d]">Your Wishlist</h2>
-            <Heart className="h-5 w-5 text-amber-700" />
+        {/* Wishlist */}
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6 }}
+          className="bg-stone-800/40 border border-amber-800/30 rounded-xl p-5"
+        >
+          <div className="flex items-center justify-between mb-5">
+            <h3 className="text-sm font-bold text-amber-200">Your Wishlist</h3>
+            <span className="text-[10px] text-amber-500/50 bg-amber-900/30 px-2 py-0.5 rounded-full border border-amber-700/20">
+              {savedPlaces.length} saved
+            </span>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {savedPlaces.map((place) => (
-              <div key={place.id} className="group cursor-pointer relative overflow-hidden rounded-lg shadow-md">
-                <img src={place.image} alt={place.name} className="w-full h-56 object-cover group-hover:scale-105 transition-transform duration-300" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
-                <div className="absolute bottom-0 left-0 p-4">
-                  <h3 className="font-bold text-white text-lg">{place.name}</h3>
-                  <p className="text-sm text-amber-200">{place.category}</p>
+              <div key={place.id} className="group relative rounded-xl overflow-hidden border border-amber-800/20 hover:border-amber-600/40 transition-all cursor-pointer">
+                <div className="aspect-[4/3] overflow-hidden">
+                  <img src={place.image} alt={place.name} loading="lazy" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
                 </div>
-                <div className="absolute top-3 right-3 p-1.5 bg-white/20 backdrop-blur-sm rounded-full">
-                  <Heart className="h-5 w-5 text-white fill-white" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+                <div className="absolute bottom-0 left-0 right-0 p-3">
+                  <p className="text-xs font-semibold text-white truncate">{place.name}</p>
+                  <p className="text-[10px] text-amber-300/70">{place.category}</p>
                 </div>
-                <div className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <button className="px-4 py-2 bg-amber-600 text-white rounded-md font-semibold mb-3">View Details</button>
-                  <button className="text-white text-sm hover:underline">Remove</button>
+                <div className="absolute top-2 right-2">
+                  <Heart className="h-3.5 w-3.5 text-red-400 fill-red-400" />
                 </div>
               </div>
             ))}
           </div>
-        </div>
+        </motion.div>
       </div>
     </div>
   );

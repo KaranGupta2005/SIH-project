@@ -2,17 +2,8 @@ import MapMarker from "../components/MapMarker";
 
 export default function Map() {
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-br from-gray-950 via-gray-900 to-black text-white">
-      
-      {/* Map Section */}
-      <main className="flex-1">
-        
-          <MapMarker />
-        
-      </main>
+    <div className="min-h-screen bg-gradient-to-b from-stone-900 via-amber-950 to-stone-900">
+      <MapMarker />
     </div>
   );
 }
-
-
-
