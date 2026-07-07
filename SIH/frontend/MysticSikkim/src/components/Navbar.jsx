@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import useAuthStore from "@/store/authStore";
+import useLanguageStore from "@/store/languageStore";
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -10,6 +11,7 @@ export default function Navbar() {
   const location = useLocation();
   const navigate = useNavigate();
   const { user, logout } = useAuthStore();
+  const { currentLang, setLang, languages } = useLanguageStore();
 
   useEffect(() => {
     setMobileOpen(false);
@@ -145,8 +147,18 @@ export default function Navbar() {
           ))}
         </div>
 
-        {/* Auth Buttons (Desktop) */}
+        {/* Language + Auth Buttons (Desktop) */}
         <div className="hidden lg:flex items-center gap-3">
+          {/* Language switcher */}
+          <select
+            value={currentLang}
+            onChange={(e) => setLang(e.target.value)}
+            className="px-2 py-1.5 bg-amber-900/40 border border-amber-700/40 rounded-lg text-xs text-amber-200 focus:outline-none cursor-pointer"
+          >
+            {languages.map((l) => (
+              <option key={l.code} value={l.code}>{l.native}</option>
+            ))}
+          </select>
           {user ? (
             <div
               className="relative"

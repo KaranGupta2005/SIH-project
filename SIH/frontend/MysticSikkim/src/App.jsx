@@ -19,6 +19,7 @@ const Login = lazy(() => import("./pages/Login"));
 const ContactUs = lazy(() => import("./pages/ContactUs"));
 const DashBoard = lazy(() => import("./pages/dashboard"));
 const TravelGuide = lazy(() => import("./pages/TravelGuide"));
+const Admin = lazy(() => import("./pages/Admin"));
 
 // Loading fallback
 function PageLoader() {
@@ -64,6 +65,7 @@ function App() {
               <Route path="/contact" element={<ContactUs />} />
               <Route path="/dashboard" element={<DashBoard />} />
               <Route path="/travel-guide" element={<TravelGuide />} />
+            <Route path="/admin" element={<Admin />} />
             </Routes>
           </Suspense>
         </main>

@@ -10,6 +10,10 @@ import chatrouter from "./routes/chat.js";
 import authRouter from "./routes/auth.js";
 import monasteriesRouter from "./routes/monasteries.js";
 import wikidataRouter from "./routes/wikidata.js";
+import reviewsRouter from "./routes/reviews.js";
+import tripsRouter from "./routes/trips.js";
+import analyticsRouter from "./routes/analytics.js";
+import adminRouter from "./routes/admin.js";
 
 const app = express();
 connectDB();
@@ -33,6 +37,10 @@ app.use("/api/chat", chatrouter);
 app.use("/api/auth", authRouter);
 app.use("/api/monasteries", monasteriesRouter);
 app.use("/api/wikidata", wikidataRouter);
+app.use("/api/reviews", reviewsRouter);
+app.use("/api/trips", tripsRouter);
+app.use("/api/analytics", analyticsRouter);
+app.use("/api/admin", adminRouter);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

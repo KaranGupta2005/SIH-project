@@ -4,6 +4,7 @@ import { motion } from "motion/react";
 import useAuthStore from "@/store/authStore";
 import useOfflineStore from "@/store/offlineStore";
 import useGamificationStore from "@/store/gamificationStore";
+import WeatherWidget from "@/components/WeatherWidget";
 import {
   MapPin, Calendar, Heart, Camera, Mountain,
   Plane, Hotel, Star, Clock, Edit, BookOpen,
@@ -213,8 +214,19 @@ export default function Dashboard() {
           </div>
         </motion.div>
 
-        {/* Main Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-8">
+        {/* Weather + Main Grid Row */}
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-5 mb-8">
+          {/* Weather widget */}
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.28 }}
+          >
+            <WeatherWidget />
+          </motion.div>
+
+          {/* Main Grid — takes remaining 3 cols */}
+          <div className="lg:col-span-3 grid grid-cols-1 lg:grid-cols-3 gap-5">
           {/* Upcoming Trips */}
           <motion.div
             initial={{ opacity: 0, y: 15 }}
@@ -309,7 +321,8 @@ export default function Dashboard() {
               </div>
             )}
           </motion.div>
-        </div>
+          </div>{/* end lg:col-span-3 */}
+        </div>{/* end Weather + Main Grid Row */}
 
         {/* Wishlist */}
         <motion.div
