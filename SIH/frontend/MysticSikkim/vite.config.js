@@ -10,5 +10,25 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'), 
     },
   },
+  server: {
+    proxy: {
+      '/api': {
+        target: 'http://localhost:5000',
+        changeOrigin: true,
+      },
+    },
+  },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom', 'react-router-dom'],
+          leaflet: ['react-leaflet', 'leaflet'],
+          motion: ['motion'],
+          three: ['three', '@react-three/fiber', '@react-three/drei'],
+        },
+      },
+    },
+  },
 })
 

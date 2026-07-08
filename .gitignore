@@ -1,0 +1,44 @@
+# Dependencies
+node_modules/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# IDE
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# Build output
+dist/
+dist-ssr/
+build/
+
+# Data files that shouldn't be committed
+chatlogs.json
+
+# Local files
+*.local
+
+# Personal files accidentally in repo
+SIH/frontend/MysticSikkim/public/images/*.pdf
+SIH/frontend/MysticSikkim/public/images/Resume*
+SIH/frontend/MysticSikkim/public/images/Admit*
+SIH/frontend/MysticSikkim/public/images/Assignment*

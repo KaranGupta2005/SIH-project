@@ -1,305 +1,161 @@
-import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
-import { motion } from "framer-motion";
+import { useState } from "react";
+import { motion } from "motion/react";
 
-const ContactUs = () => {
-  const canvasRef = useRef(null);
-  const animationFrameId = useRef(null);
-  const particlesArrayRef = useRef([]);
-  const mouseRef = useRef({ x: null, y: null, radius: 0 });
+export default function ContactUs() {
+  const [form, setForm] = useState({ name: "", email: "", subject: "", message: "" });
+  const [status, setStatus] = useState({ text: "", type: "" });
+  const [loading, setLoading] = useState(false);
 
-  const [formState, setFormState] = useState({
-    name: "",
-    email: "",
-    message: "",
-  });
-  const [formMessage, setFormMessage] = useState({ text: "", type: "" });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  // Particle initialization
-  const initParticles = useCallback((canvas) => {
-    particlesArrayRef.current = [];
-    const numberOfParticles = Math.min(
-      150,
-      (canvas.height * canvas.width) / 12000
-    );
-
-    for (let i = 0; i < numberOfParticles; i++) {
-      const size = Math.random() * 2 + 1;
-      const x = Math.random() * (canvas.width - size * 2) + size;
-      const y = Math.random() * (canvas.height - size * 2) + size;
-      const directionX = (Math.random() - 0.5) * 0.4;
-      const directionY = (Math.random() - 0.5) * 0.4;
-
-      particlesArrayRef.current.push({
-        x,
-        y,
-        directionX,
-        directionY,
-        size,
-        color: "rgba(245, 158, 11, 0.4)",
-      });
-    }
-  }, []);
-
-  const updateParticle = useCallback((particle, canvas, mouse) => {
-    if (particle.x > canvas.width || particle.x < 0) particle.directionX = -particle.directionX;
-    if (particle.y > canvas.height || particle.y < 0) particle.directionY = -particle.directionY;
-
-    if (mouse.x !== null && mouse.y !== null) {
-      const dx = mouse.x - particle.x;
-      const dy = mouse.y - particle.y;
-      const distance = Math.sqrt(dx * dx + dy * dy);
-      if (distance < mouse.radius + particle.size) {
-        const force = (mouse.radius + particle.size - distance) / (mouse.radius + particle.size);
-        const forceDirectionX = dx / distance;
-        const forceDirectionY = dy / distance;
-        particle.x -= forceDirectionX * force * 3;
-        particle.y -= forceDirectionY * force * 3;
-      }
-    }
-
-    particle.x += particle.directionX;
-    particle.y += particle.directionY;
-  }, []);
-
-  const animate = useCallback(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    const ctx = canvas.getContext("2d");
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    particlesArrayRef.current.forEach((particle) => {
-      updateParticle(particle, canvas, mouseRef.current);
-      ctx.beginPath();
-      ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2, false);
-      ctx.fillStyle = particle.color;
-      ctx.fill();
-    });
-
-    animationFrameId.current = requestAnimationFrame(animate);
-  }, [updateParticle]);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    mouseRef.current.radius = Math.min(80, (canvas.height * canvas.width) / 15000);
-
-    const handleMouseMove = (e) => {
-      mouseRef.current.x = e.clientX;
-      mouseRef.current.y = e.clientY;
-    };
-
-    const handleResize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-      mouseRef.current.radius = Math.min(80, (canvas.height * canvas.width) / 15000);
-      initParticles(canvas);
-    };
-
-    window.addEventListener("mousemove", handleMouseMove);
-    window.addEventListener("resize", handleResize);
-
-    initParticles(canvas);
-    animate();
-
-    return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("resize", handleResize);
-      if (animationFrameId.current) cancelAnimationFrame(animationFrameId.current);
-    };
-  }, [initParticles, animate]);
-
-  const handleInputChange = useCallback(
-    (e) => {
-      const { name, value } = e.target;
-      setFormState((prev) => ({ ...prev, [name]: value }));
-      if (formMessage.text) setFormMessage({ text: "", type: "" });
-    },
-    [formMessage.text]
-  );
-
-  const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsSubmitting(true);
+    setLoading(true);
+    setStatus({ text: "", type: "" });
 
-    if (!formState.name.trim() || !formState.email.trim() || !formState.message.trim()) {
-      setFormMessage({ text: "Please fill out all fields.", type: "error" });
-      setIsSubmitting(false);
+    if (!form.name || !form.email || !form.message) {
+      setStatus({ text: "Please fill all required fields.", type: "error" });
+      setLoading(false);
       return;
     }
 
-    if (!validateEmail(formState.email)) {
-      setFormMessage({ text: "Please enter a valid email address.", type: "error" });
-      setIsSubmitting(false);
-      return;
-    }
-
-    try {
-      // Simulate sending
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      setFormMessage({ text: `Thank you, ${formState.name}! We'll be in touch within 24 hours.`, type: "success" });
-      setFormState({ name: "", email: "", message: "" });
-    } catch {
-      setFormMessage({ text: "Something went wrong. Please try again.", type: "error" });
-    } finally {
-      setIsSubmitting(false);
-    }
-
-    setTimeout(() => setFormMessage({ text: "", type: "" }), 5000);
+    await new Promise((r) => setTimeout(r, 1000));
+    setStatus({ text: `Thanks ${form.name}! We'll respond within 24 hours.`, type: "success" });
+    setForm({ name: "", email: "", subject: "", message: "" });
+    setLoading(false);
   };
 
-  const messageClasses = useMemo(() => {
-    if (!formMessage.text) return "opacity-0";
-    return formMessage.type === "success" ? "text-green-400 opacity-100" : "text-red-400 opacity-100";
-  }, [formMessage]);
+  const contactInfo = [
+    { label: "Email", value: "contact@mysticsikkim.com", href: "mailto:contact@mysticsikkim.com" },
+    { label: "Phone", value: "+91 98765 43210", href: "tel:+919876543210" },
+    { label: "Office", value: "Gangtok, Sikkim, India", href: null },
+    { label: "Hours", value: "Mon–Sat, 9 AM – 6 PM IST", href: null },
+  ];
+
+  const faqs = [
+    { q: "Do I need permits to visit monasteries?", a: "Most monasteries are free to visit. North Sikkim requires ILP. Check our Travel Guide for details." },
+    { q: "Can I take photos inside monasteries?", a: "Photography rules vary. Always ask permission before photographing prayer halls or monks." },
+    { q: "Is the platform free to use?", a: "Yes, MysticSikkim is completely free for all users." },
+  ];
 
   return (
-    <>
-      <canvas
-        ref={canvasRef}
-        aria-hidden="true"
-        className="fixed top-0 left-0 w-full h-full -z-10"
-      />
+    <div className="min-h-screen bg-gradient-to-b from-stone-900 via-amber-950 to-stone-900 text-amber-50 pb-16">
+      <div className="max-w-6xl mx-auto px-6 pt-8">
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center mb-12"
+        >
+          <h1 className="text-4xl md:text-5xl font-extrabold text-amber-200 tracking-tight">
+            Get in Touch
+          </h1>
+          <p className="mt-3 text-amber-400/60 max-w-lg mx-auto">
+            Questions, feedback, or collaboration ideas? We're here to help.
+          </p>
+        </motion.div>
 
-      <div className="relative min-h-screen w-screen flex items-center justify-center p-4">
-        <div className="absolute inset-0 bg-gradient-to-b from-amber-900 via-amber-700 to-yellow-600"></div>
-
-        <div className="relative z-10 w-full max-w-4xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
+          {/* Form — takes 3 columns */}
+          <motion.form
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-            className="rounded-3xl shadow-2xl overflow-hidden p-8 md:p-12 backdrop-blur-xl bg-black/50 border border-amber-500/40"
+            transition={{ delay: 0.1 }}
+            onSubmit={handleSubmit}
+            className="lg:col-span-3 bg-stone-800/40 border border-amber-800/30 rounded-2xl p-6 md:p-8 space-y-5"
           >
-            <header className="text-center">
-              <motion.h1
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.6 }}
-                className="text-4xl md:text-6xl font-serif font-extrabold text-amber-400 tracking-wide drop-shadow-[0_3px_10px_rgba(0,0,0,0.85)]"
-              >
-                Get in Touch
-              </motion.h1>
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3, duration: 0.6 }}
-                className="mt-4 text-lg md:text-xl font-serif italic bg-gradient-to-r from-amber-300 via-orange-400 to-yellow-200 bg-clip-text text-transparent drop-shadow-[0_3px_8px_rgba(0,0,0,0.8)]"
-              >
-                Let's Start a Conversation
-              </motion.p>
-            </header>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="text-xs font-semibold text-amber-400/70 uppercase tracking-wider mb-1.5 block">Name *</label>
+                <input
+                  name="name" value={form.name} onChange={handleChange} required disabled={loading}
+                  className="w-full px-4 py-3 bg-stone-700/40 border border-amber-800/30 rounded-xl text-amber-100 placeholder-amber-600/40 text-sm focus:outline-none focus:border-amber-600/60 transition-colors disabled:opacity-50"
+                  placeholder="Your name"
+                />
+              </div>
+              <div>
+                <label className="text-xs font-semibold text-amber-400/70 uppercase tracking-wider mb-1.5 block">Email *</label>
+                <input
+                  name="email" type="email" value={form.email} onChange={handleChange} required disabled={loading}
+                  className="w-full px-4 py-3 bg-stone-700/40 border border-amber-800/30 rounded-xl text-amber-100 placeholder-amber-600/40 text-sm focus:outline-none focus:border-amber-600/60 transition-colors disabled:opacity-50"
+                  placeholder="you@example.com"
+                />
+              </div>
+            </div>
 
-            <div className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-start">
-              {/* Contact Form */}
-              <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
-                {["name", "email", "message"].map((field, idx) =>
-                  field === "message" ? (
-                    <textarea
-                      key={idx}
-                      name="message"
-                      rows="4"
-                      required
-                      placeholder="Your Message..."
-                      value={formState.message}
-                      onChange={handleInputChange}
-                      disabled={isSubmitting}
-                      className="form-input w-full px-4 py-3 bg-amber-900/50 rounded-lg text-white placeholder-yellow-200/60 focus:outline-none focus:ring-2 focus:ring-yellow-400 transition-all duration-300 resize-none disabled:opacity-50"
-                    />
-                  ) : (
-                    <input
-                      key={idx}
-                      type={field === "email" ? "email" : "text"}
-                      name={field}
-                      required
-                      placeholder={`Your ${field.charAt(0).toUpperCase() + field.slice(1)}`}
-                      value={formState[field]}
-                      onChange={handleInputChange}
-                      disabled={isSubmitting}
-                      className="form-input w-full px-4 py-3 bg-amber-900/50 rounded-lg text-white placeholder-yellow-200/60 focus:outline-none focus:ring-2 focus:ring-yellow-400 transition-all duration-300 disabled:opacity-50"
-                    />
-                  )
-                )}
+            <div>
+              <label className="text-xs font-semibold text-amber-400/70 uppercase tracking-wider mb-1.5 block">Subject</label>
+              <input
+                name="subject" value={form.subject} onChange={handleChange} disabled={loading}
+                className="w-full px-4 py-3 bg-stone-700/40 border border-amber-800/30 rounded-xl text-amber-100 placeholder-amber-600/40 text-sm focus:outline-none focus:border-amber-600/60 transition-colors disabled:opacity-50"
+                placeholder="What's this about?"
+              />
+            </div>
 
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="bg-yellow-400 hover:bg-yellow-500 text-amber-900 font-semibold py-3 rounded-lg transition-all duration-300 disabled:opacity-50"
-                >
-                  {isSubmitting ? (
-                    <div className="flex items-center justify-center space-x-2">
-                      <div className="w-4 h-4 border-2 border-amber-900 border-t-transparent rounded-full animate-spin"></div>
-                      <span>Sending...</span>
-                    </div>
-                  ) : (
-                    "Send Message"
-                  )}
-                </motion.button>
+            <div>
+              <label className="text-xs font-semibold text-amber-400/70 uppercase tracking-wider mb-1.5 block">Message *</label>
+              <textarea
+                name="message" rows={5} value={form.message} onChange={handleChange} required disabled={loading}
+                className="w-full px-4 py-3 bg-stone-700/40 border border-amber-800/30 rounded-xl text-amber-100 placeholder-amber-600/40 text-sm focus:outline-none focus:border-amber-600/60 transition-colors resize-none disabled:opacity-50"
+                placeholder="Tell us what's on your mind..."
+              />
+            </div>
 
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: formMessage.text ? 1 : 0 }}
-                  transition={{ duration: 0.3 }}
-                  className={`mt-2 text-center ${messageClasses}`}
-                  role={formMessage.type === "error" ? "alert" : "status"}
-                >
-                  {formMessage.text}
-                </motion.div>
-              </form>
+            <button
+              type="submit" disabled={loading}
+              className="w-full py-3.5 bg-amber-600 hover:bg-amber-500 text-white font-semibold rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-amber-600/20"
+            >
+              {loading ? "Sending..." : "Send Message"}
+            </button>
 
-              {/* Contact Info */}
-              <motion.address
-                initial={{ opacity: 0, x: 40 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.4, duration: 0.6 }}
-                className="text-amber-100/80 space-y-6 pt-2 not-italic"
-              >
-                <div>
-                  <p className="font-semibold text-amber-200 mb-1">Our Office</p>
-                  <p className="text-sm leading-relaxed">123 Connaught Place, New Delhi</p>
-                  <p className="text-sm leading-relaxed">Delhi, 110001, India</p>
-                </div>
+            {status.text && (
+              <p className={`text-sm text-center ${status.type === "success" ? "text-green-400" : "text-red-400"}`}>
+                {status.text}
+              </p>
+            )}
+          </motion.form>
 
-                <div>
-                  <p className="font-semibold text-amber-200 mb-1">Email Us</p>
-                  <a
-                    href="mailto:contact@mysticsikkim.com"
-                    className="text-sm hover:text-yellow-400 transition-colors"
-                  >
-                    contact@mysticsikkim.com
-                  </a>
-                </div>
+          {/* Sidebar — takes 2 columns */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="lg:col-span-2 space-y-6"
+          >
+            {/* Contact Info */}
+            <div className="bg-stone-800/40 border border-amber-800/30 rounded-2xl p-6">
+              <h3 className="text-sm font-bold text-amber-300 uppercase tracking-wider mb-4">Contact Info</h3>
+              <div className="space-y-4">
+                {contactInfo.map((item) => (
+                  <div key={item.label}>
+                    <p className="text-xs text-amber-500/60">{item.label}</p>
+                    {item.href ? (
+                      <a href={item.href} className="text-sm text-amber-200 hover:text-amber-100 transition-colors">
+                        {item.value}
+                      </a>
+                    ) : (
+                      <p className="text-sm text-amber-200">{item.value}</p>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
 
-                <div>
-                  <p className="font-semibold text-amber-200 mb-1">Call Us</p>
-                  <a
-                    href="tel:+919876543210"
-                    className="text-sm hover:text-yellow-400 transition-colors"
-                  >
-                    +91 98765 43210
-                  </a>
-                </div>
-
-                <div className="pt-4 border-t border-amber-700/50">
-                  <p className="text-xs text-amber-200/60 text-center">
-                    We typically respond within 24 hours
-                  </p>
-                </div>
-              </motion.address>
+            {/* FAQ */}
+            <div className="bg-stone-800/40 border border-amber-800/30 rounded-2xl p-6">
+              <h3 className="text-sm font-bold text-amber-300 uppercase tracking-wider mb-4">Quick FAQ</h3>
+              <div className="space-y-4">
+                {faqs.map((faq, i) => (
+                  <div key={i}>
+                    <p className="text-sm font-medium text-amber-200">{faq.q}</p>
+                    <p className="text-xs text-amber-400/60 mt-1 leading-relaxed">{faq.a}</p>
+                  </div>
+                ))}
+              </div>
             </div>
           </motion.div>
         </div>
       </div>
-    </>
+    </div>
   );
-};
-
-export default ContactUs;
+}

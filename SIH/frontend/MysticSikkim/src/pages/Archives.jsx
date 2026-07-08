@@ -8,14 +8,14 @@ import { motion, AnimatePresence } from "motion/react";
 // ---- Search Bar Component ----
 export function SearchBar({ query, setQuery }) {
   return (
-    <div className="flex items-center gap-2 w-full max-w-sm bg-black/30 backdrop-blur-md p-3 rounded-2xl border-2 border-amber-400/50 shadow-lg">
-      <Search className="w-5 h-5 text-amber-400 ml-2" />
+    <div className="flex items-center gap-2 w-full max-w-sm bg-stone-800/60 backdrop-blur-md p-3 rounded-xl border border-amber-700/40">
+      <Search className="w-4 h-4 text-amber-500 ml-1" />
       <Input
         type="text"
         placeholder="Search archives..."
         value={query}
         onChange={(e) => setQuery(e.target.value)}
-        className="border-none focus-visible:ring-0 focus-visible:ring-offset-0 text-gray-100 placeholder-gray-400 bg-transparent flex-grow"
+        className="border-none focus-visible:ring-0 focus-visible:ring-offset-0 text-gray-100 placeholder-amber-600/50 bg-transparent flex-grow"
       />
       {query && (
         <Button
@@ -94,6 +94,7 @@ const tabs = [
   { id: "murals", label: "Murals", count: archiveData.murals.length },
   { id: "photos", label: "Photos", count: archiveData.photos.length },
   { id: "documents", label: "Documents", count: archiveData.documents.length },
+  { id: "gallery", label: "Wikimedia Gallery", count: "Live" },
 ];
 
 // ---- Archives Component ----
@@ -102,6 +103,20 @@ export default function Archives() {
   const [selectedItem, setSelectedItem] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredItems, setFilteredItems] = useState([]);
+  const [wikiImages, setWikiImages] = useState([]);
+  const [wikiLoading, setWikiLoading] = useState(false);
+
+  // Fetch Wikimedia images when gallery tab is selected
+  useEffect(() => {
+    if (activeTab === "gallery" && wikiImages.length === 0) {
+      setWikiLoading(true);
+      fetch("/api/wikidata/images?category=Buddhist_monasteries_in_Sikkim")
+        .then((r) => r.json())
+        .then((data) => setWikiImages(data.images || []))
+        .catch(() => setWikiImages([]))
+        .finally(() => setWikiLoading(false));
+    }
+  }, [activeTab]);
 
   useEffect(() => {
     const items = archiveData[activeTab] || [];
@@ -163,14 +178,57 @@ export default function Archives() {
         </div>
 
         {/* Archive Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-14">
-          {filteredItems.map((item) => (
-            <ArchiveCard key={item.id} item={item} onView360={() => setSelectedItem(item)} />
-          ))}
-        </div>
+        {activeTab !== "gallery" && (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-14">
+            {filteredItems.map((item) => (
+              <ArchiveCard key={item.id} item={item} onView360={() => setSelectedItem(item)} />
+            ))}
+          </div>
+        )}
+
+        {/* Wikimedia Gallery */}
+        {activeTab === "gallery" && (
+          <div className="mb-14">
+            {wikiLoading ? (
+              <div className="text-center py-16">
+                <div className="w-8 h-8 border-3 border-amber-500 border-t-transparent rounded-full animate-spin mx-auto mb-3" />
+                <p className="text-amber-400/60 text-sm">Loading from Wikimedia Commons...</p>
+              </div>
+            ) : wikiImages.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                {wikiImages.map((img, i) => (
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: i * 0.03 }}
+                    className="group rounded-2xl overflow-hidden border border-amber-700/30 bg-stone-800/40 hover:border-amber-600/50 transition-all cursor-pointer"
+                    onClick={() => window.open(img.fullUrl, "_blank")}
+                  >
+                    <div className="aspect-[4/3] overflow-hidden bg-stone-900">
+                      <img src={img.url} alt={img.title} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                    </div>
+                    <div className="p-4">
+                      <h3 className="text-sm font-semibold text-amber-200 line-clamp-1">{img.title}</h3>
+                      {img.author && <p className="text-xs text-amber-500/50 mt-1">📷 {img.author}</p>}
+                      {img.license && <span className="inline-block mt-2 text-[10px] px-2 py-0.5 rounded-full bg-amber-900/40 text-amber-400 border border-amber-700/30">{img.license}</span>}
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-12 text-amber-500/50">
+                <p>No images available. Check your connection.</p>
+              </div>
+            )}
+            <p className="text-center text-xs text-amber-600/40 mt-6">
+              Images sourced from Wikimedia Commons under Creative Commons licenses.
+            </p>
+          </div>
+        )}
 
         {/* No Results */}
-        {filteredItems.length === 0 && (
+        {activeTab !== "gallery" && filteredItems.length === 0 && (
           <div className="text-center py-12 text-gray-400">
             <div className="text-6xl mb-4">📚</div>
             <h3 className="text-xl font-semibold mb-2">No archives found</h3>
